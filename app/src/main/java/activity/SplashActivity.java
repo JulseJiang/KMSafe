@@ -26,7 +26,7 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Log.i(TAG,"启动页面成功");
         initUI();
-//        初始化数据
+//      初始化数据
         initData();
     }
 
@@ -45,7 +45,10 @@ public class SplashActivity extends AppCompatActivity {
     private void initData() {
         //应用版本名称
         tv_version_name.setText("版本名称："+getVersionName());
-        Log.i(TAG,getVersionName());
+        Log.i(TAG,"getVersionName 版本名称"+tv_version_name.getText().toString());
+        //获取本地版本号
+        mLovalVersionCode=getVersionCode();
+        Log.i(TAG,"getVersionCode 版本号"+mLovalVersionCode);
         //检测（本地版本号和服务器版本号进行对比）是否有更新，如果有更新，提示用户下载（member）
         //获取服务器版本号（客户端发起请求，服务端给响应，（json,xml））
         //http://119.29.62.167?key=value 返回200请求成功，通过流的方式读取数据
@@ -61,6 +64,9 @@ public class SplashActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * 检查版本号
+     */
     private void checkVersion() {
         new Thread(new Runnable() {
             @Override
@@ -98,8 +104,17 @@ public class SplashActivity extends AppCompatActivity {
      * 非0则代表获取成功
      */
     private int  getVersionCode() {
-
+        //包管理者对象
+        PackageManager pm = getPackageManager();
+        //从包管理者对象中，获取版本信息（版本名称，版本号）
+        try {
+            PackageInfo packageinfo =  pm.getPackageInfo(SplashActivity.this.getPackageName(),0);
+            return packageinfo.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
         return 0;
+
     }
 
     /**
@@ -110,12 +125,9 @@ public class SplashActivity extends AppCompatActivity {
     public String getVersionName(){
         //包管理者对象
         PackageManager pm = getPackageManager();
-        //从包管理者对象中，获取版本信息（版本名称，版本号）
+        //从包管理者对象中，获取版本信息（版本名称）
         try {
-            PackageInfo packageinfo =  pm.getPackageInfo(getPackageName(),0);
-            //获取本地版本号
-            mLovalVersionCode=packageinfo.versionCode;
-            //获取版本名称
+            PackageInfo packageinfo =  pm.getPackageInfo(SplashActivity.this.getPackageName(),0);
             return packageinfo.versionName;
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
