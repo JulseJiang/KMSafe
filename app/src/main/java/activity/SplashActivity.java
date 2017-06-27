@@ -17,14 +17,14 @@ import util.StreamUtil;
 
 
 public class SplashActivity extends AppCompatActivity {
-    private final String TAG="SplashActivity";
+    private final String TAG="Life";
     private TextView tv_version_name;
     private int mLovalVersionCode;//本地版本号
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        Log.i(TAG,"启动页面成功");
         initUI();
 //        初始化数据
         initData();
@@ -45,6 +45,7 @@ public class SplashActivity extends AppCompatActivity {
     private void initData() {
         //应用版本名称
         tv_version_name.setText("版本名称："+getVersionName());
+        Log.i(TAG,getVersionName());
         //检测（本地版本号和服务器版本号进行对比）是否有更新，如果有更新，提示用户下载（member）
         //获取服务器版本号（客户端发起请求，服务端给响应，（json,xml））
         //http://119.29.62.167?key=value 返回200请求成功，通过流的方式读取数据
@@ -64,18 +65,20 @@ public class SplashActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                Log.i(TAG,"启动线程");
                 //发送请求获取数据，参数则为请求json的链接地址
                 try{
                     //封装url地址
-                    URL url =new URL("http://localhost:8080/KMSafe/version.json");
-                    //开启一个连接
+                    URL url =new URL("http://119.29.62.167/KMSafe/version.json");
+                    //开启一个连接http://119.29.62.167/KMSafe/version.json
                     HttpURLConnection connection = (HttpURLConnection)url.openConnection();
                     //设置常见请求参数
                     //请求超时
-                    connection.setConnectTimeout(2000);
+                    connection.setConnectTimeout(8000);
                     //读取超时
-                    connection.setReadTimeout(2000);
+                    connection.setReadTimeout(8000);
                     //默认为get方法
+                    Log.i(TAG,"connection.getResponseCode()"+connection.getResponseCode());
                     if (connection.getResponseCode()==200){
                         InputStream is = connection.getInputStream();
                         String json = StreamUtil.streamToString(is);
@@ -83,9 +86,10 @@ public class SplashActivity extends AppCompatActivity {
                     }
                 }catch (Exception e){
                     e.printStackTrace();
+                    Log.i(TAG,"URL"+"异常");
                 }
             }
-        });
+        }).start();
     }
 
     /**
