@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.julse.jules.kmsafe"
-    android:versionCode="1"
-    android:versionName="1.2.1">
-    <uses-sdk
-        android:minSdkVersion="8"
-        android:targetSdkVersion="18"/>
+    package="com.julse.jules.kmsafe">
+
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:allowBackup="true"
@@ -19,6 +15,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="activity.HomeActivity"/>
     </application>
 
 </manifest>
