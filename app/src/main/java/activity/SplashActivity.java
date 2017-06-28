@@ -1,21 +1,29 @@
 package activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.nfc.Tag;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
 import com.julse.jules.kmsafe.R;
+import com.lidroid.xutils.HttpUtils;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -23,6 +31,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import util.StreamUtil;
+import util.ToastUtil;
 
 
 public class SplashActivity extends AppCompatActivity {
@@ -43,7 +52,11 @@ public class SplashActivity extends AppCompatActivity {
 
     private final String TAG="Life";
     private TextView tv_version_name;
+    private String mVersionName;
     private int mLovalVersionCode;//本地版本号
+    private  String mVersionDes;
+    private  String mDownloadUrl;
+    private int mVersionCode;
     private Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -51,18 +64,89 @@ public class SplashActivity extends AppCompatActivity {
             super.handleMessage(msg);
             switch (msg.what){
                 case UPDATE_VERSION:
+                    //弹出对话框
+                    showUpdateDialog();
                     break;
                 case ENTER_HOME:
-                    //进入应用程序主界面，Activity跳转
+                    //进入应用程序主界面，Activity跳转,报异常不影响用户使用
                     enterHome();
                     break;
                 case URL_ERROR:
+                    //常见操作封装到工具类
+//                    Toast.makeText(SplashActivity.this,"网络故障",Toast.LENGTH_SHORT).show();
+                    ToastUtil.show(getApplicationContext(),"url异常");
+                    enterHome();
                     break;
                 case JSON_ERROR:
+                    ToastUtil.show(getApplicationContext(),"json异常");
+                    enterHome();
                     break;
             }
         }
     };
+
+    /**
+     * 弹出对话框，提示用户更新
+     */
+    private void showUpdateDialog() {
+        //对话框依赖于activity存在的
+        final AlertDialog.Builder builer = new AlertDialog.Builder(this);
+        builer.setTitle("update");
+        builer.setIcon(R.drawable.icon);
+        builer.setMessage(mVersionDes);
+        builer.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //下载apk
+                downloadApk();
+            }
+        });
+        builer.setNegativeButton("skip", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //取消对话框，进入主界面
+                enterHome();
+            }
+        });
+        builer.show();
+
+
+    }
+
+    /**
+     * 下载apk
+     */
+    private void downloadApk() {
+        //apk先下载的连接地址downloadUrl，放置apk所在的路径
+        //1.判断sdk是否可以
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
+            //2.获取sdk路径
+            String path = Environment.getExternalStorageDirectory().getAbsolutePath() +
+                    File.separator + "KMSafe20.apk";
+            //3.发出请求，获取apk，并且防止到制定路径
+            HttpUtils httpUtils = new HttpUtils();
+            //4.发送请求，传递参数（下载地址，应用放置地址）
+            httpUtils.download(mDownloadUrl, path, new RequestCallBack<File>() {
+                @Override
+                public void onSuccess(ResponseInfo<File> responseInfo) {
+                    //下载成功（下载成功放在sdk卡中的apk）
+                    Log.i(TAG,"下载成功");
+                    File file = responseInfo.result;
+                }
+
+                @Override
+                public void onFailure(HttpException e, String s) {
+                    //下载失败
+                }
+                //参数说明：下载总长度，当前下载位置，是否正在下载
+                @Override
+                public void onLoading(long total, long current, boolean isUploading) {
+                    super.onLoading(total, current, isUploading);
+                    //下载过程
+                }
+            });
+        }
+    }
 
     /**
      * 进入应用程序的主界面
@@ -147,17 +231,19 @@ public class SplashActivity extends AppCompatActivity {
                         String json = StreamUtil.streamToString(is);
                         Log.i(TAG,json);
                         JSONObject jsonObject =  new JSONObject(json);
-                        String versionName = jsonObject.getString("versionName");
-                        String versionDes = jsonObject.getString("versionDes");
-                        int versionCode = Integer.parseInt(jsonObject.getString("versionCode"));
-                        String downloadUrl = jsonObject.getString("downloadUrl");
+                        mVersionName = jsonObject.getString("versionName");
+                        mVersionDes = jsonObject.getString("versionDes");
+                        mVersionCode = Integer.parseInt(jsonObject.getString("versionCode"));
+
+                        mDownloadUrl = jsonObject.getString("downloadUrl");
                         //debug调式优化
-                        Log.i(TAG,"versionName:"+versionName);
-                        Log.i(TAG,"versionDes:"+versionDes);
-                        Log.i(TAG,"versionCode:"+versionCode+"");
-                        Log.i(TAG,"downloadUrl:"+downloadUrl);
+                        Log.i(TAG,"versionName:"+mVersionName);
+                        Log.i(TAG,"versionDes:"+ mVersionDes);
+                        Log.i(TAG,"versionCode:"+mVersionCode+"");
+                        Log.i(TAG,"downloadUrl:"+ mDownloadUrl);
+                        Log.i(TAG,"mLovalVersionCode<versionCode:"+(mLovalVersionCode<mVersionCode));
                     //比对版本号
-                        if (mLovalVersionCode>versionCode){
+                        if (mLovalVersionCode<mVersionCode){
                             //提示用户更新，弹出对话框（UI）主线程不能处理UI
                             msg.what = UPDATE_VERSION;
                         }else{
