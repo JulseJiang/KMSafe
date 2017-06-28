@@ -4,14 +4,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.nfc.Tag;
-import android.os.Environment;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.animation.AlphaAnimation;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.julse.jules.kmsafe.R;
@@ -52,6 +53,7 @@ public class SplashActivity extends AppCompatActivity {
 
     private final String TAG="Life";
     private TextView tv_version_name;
+    private RelativeLayout rl_root;
     private String mVersionName;
     private int mLovalVersionCode;//本地版本号
     private  String mVersionDes;
@@ -71,6 +73,10 @@ public class SplashActivity extends AppCompatActivity {
                     //进入应用程序主界面，Activity跳转,报异常不影响用户使用
                     enterHome();
                     break;
+                case IO_ERROR:
+                    ToastUtil.show(getApplicationContext(),"io异常");
+                    enterHome();
+                    break;
                 case URL_ERROR:
                     //常见操作封装到工具类
 //                    Toast.makeText(SplashActivity.this,"网络故障",Toast.LENGTH_SHORT).show();
@@ -84,6 +90,26 @@ public class SplashActivity extends AppCompatActivity {
             }
         }
     };
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        Log.i(TAG,"启动页面成功");
+        initUI();
+//      初始化数据
+        initData();
+//      初始化动画
+        initAnimation();
+    }
+
+    /**
+     * 初始化动画，淡入
+     */
+    private void initAnimation() {
+        AlphaAnimation alphaAnimation = new AlphaAnimation(0,1);
+        alphaAnimation.setDuration(3000);
+        rl_root.startAnimation(alphaAnimation);
+    }
 
     /**
      * 弹出对话框，提示用户更新
@@ -108,6 +134,14 @@ public class SplashActivity extends AppCompatActivity {
                 enterHome();
             }
         });
+        builer.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                //即使用户点击取消，也需要让其进入应用程序主界面
+                enterHome();
+                dialog.dismiss();
+            }
+        });
         builer.show();
 
 
@@ -119,33 +153,74 @@ public class SplashActivity extends AppCompatActivity {
     private void downloadApk() {
         //apk先下载的连接地址downloadUrl，放置apk所在的路径
         //1.判断sdk是否可以
-        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
+
+        String path;
+       /* if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
             //2.获取sdk路径
-            String path = Environment.getExternalStorageDirectory().getAbsolutePath() +
+            path = Environment.getExternalStorageDirectory().getAbsolutePath() +
                     File.separator + "KMSafe20.apk";
-            //3.发出请求，获取apk，并且防止到制定路径
+        }else {*/
+            File apkfile = new File("/KMSafe21.apk");
+            path=apkfile.getAbsolutePath();
+//        }
+        Log.i(TAG,"path:"+path);
+//        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
+
+            //3.发出请求，获取apk，并且放到指定路径
             HttpUtils httpUtils = new HttpUtils();
             //4.发送请求，传递参数（下载地址，应用放置地址）
-            httpUtils.download(mDownloadUrl, path, new RequestCallBack<File>() {
+        mDownloadUrl="http://119.29.62.167/KMSafe/version.json";
+                httpUtils.download(mDownloadUrl, path, new RequestCallBack<File>() {
                 @Override
                 public void onSuccess(ResponseInfo<File> responseInfo) {
                     //下载成功（下载成功放在sdk卡中的apk）
                     Log.i(TAG,"下载成功");
                     File file = responseInfo.result;
+                    //提示用户安装
+                    installApk(file);
                 }
 
                 @Override
                 public void onFailure(HttpException e, String s) {
                     //下载失败
+                    Log.i(TAG,"下载失败:"+s);
+
                 }
                 //参数说明：下载总长度，当前下载位置，是否正在下载
                 @Override
                 public void onLoading(long total, long current, boolean isUploading) {
                     super.onLoading(total, current, isUploading);
                     //下载过程
+                    Log.i(TAG,"正在下载");
                 }
-            });
+                });
         }
+//    }
+
+    /**
+     * 安装下载的apk
+     * @param file
+     */
+    private void installApk(File file) {
+        //系统应用界面，源码接口，安装apk入口,隐式意图,匹配系统activity的过滤器
+        Intent intent = new Intent("android.intent.action.VIEW");
+        intent.addCategory("android.intent.category.DEFAULT");
+        //文件作为数据源同时设置类型
+        intent.setDataAndType(Uri.fromFile(file),
+                "application/vnd.android.package-archive");
+        startActivityForResult(intent,0);
+    }
+
+    /**
+     * 开启一个Activity后，返回结果调用的方法
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        enterHome();
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     /**
@@ -159,15 +234,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Log.i(TAG,"启动页面成功");
-        initUI();
-//      初始化数据
-        initData();
-    }
+
 
     /**
      * 初始化UI alt+shift+j
@@ -175,7 +242,7 @@ public class SplashActivity extends AppCompatActivity {
     private void initUI() {
         //ctrl+1
         tv_version_name=(TextView) findViewById(R.id.version_name);
-
+        rl_root= (RelativeLayout) findViewById(R.id.root);
     }
 
     /**
@@ -254,7 +321,6 @@ public class SplashActivity extends AppCompatActivity {
                 }catch (MalformedURLException e){
                     e.printStackTrace();
                     msg.what = URL_ERROR;
-                    Log.i(TAG,"URL"+"异常");
                 }catch (IOException e){
                     e.printStackTrace();
                     msg.what = IO_ERROR;

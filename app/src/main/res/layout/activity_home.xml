@@ -1,11 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
     <TextView
         android:text="HomeActivity"
-        android:layout_width="wrap_content"
+        style="@style/TitleStyle"/>
+    <!--跑马灯-->
+    <!--自定义控件达到滚动效果-->
+    <!--<TextView
+        android:text="Discover interesting projects and people to populate your personal news feed.Your news feed helps you keep up with recent activity on repositories you watch and people you follow."
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="#000"
-        android:textSize="20sp"/>
+        android:lines="1"
+        android:padding="5dp"
+        android:ellipsize="marquee"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:marqueeRepeatLimit="marquee_forever"
+
+        />-->
+    <View.FocusTextView
+        android:text="Discover interesting projects and people to populate your personal news feed.Your news ."
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#000"
+        android:padding="5dp"
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"
+        />
+    <GridView
+        android:id="@+id/gv_home"
+        android:numColumns="3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    </GridView>
+
 </LinearLayout>
