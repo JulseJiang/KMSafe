@@ -31,6 +31,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import util.ConstantValue;
+import util.SpUtils;
 import util.StreamUtil;
 import util.ToastUtil;
 
@@ -51,7 +53,7 @@ public class SplashActivity extends AppCompatActivity {
     private static final int IO_ERROR = 103;
     private static final int JSON_ERROR = 104;
 
-    private final String TAG="Life";
+    private final String TAG="Life_SplashActivity";
     private TextView tv_version_name;
     private RelativeLayout rl_root;
     private String mVersionName;
@@ -265,7 +267,13 @@ public class SplashActivity extends AppCompatActivity {
          *      服务器版本号
          *      新版本apk下载地址
          */
-        checkVersion();
+        if(SpUtils.getBoolean(this, ConstantValue.OPEN_UPDATE,false)){
+            checkVersion();
+        }else {
+            //在发送消息4s后去处理ENTER_HOME状态码
+            mHandler.sendEmptyMessageDelayed(ENTER_HOME,4000);
+        }
+
 
 
     }
@@ -292,8 +300,8 @@ public class SplashActivity extends AppCompatActivity {
                     //读取超时
                     connection.setReadTimeout(8000);
                     //默认为get方法
-                    Log.i(TAG,"connection.getResponseCode()"+connection.getResponseCode());
-                    if (connection.getResponseCode()==200){
+//                    Log.i(TAG,"connection.getResponseCode()"+connection.getResponseCode());
+                    if (connection.getResponseCode()==200){//io异常
                         InputStream is = connection.getInputStream();
                         String json = StreamUtil.streamToString(is);
                         Log.i(TAG,json);

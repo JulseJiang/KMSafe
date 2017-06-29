@@ -1,12 +1,19 @@
 package activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.ScaleAnimation;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
@@ -16,7 +23,9 @@ import com.julse.jules.kmsafe.R;
  * Created by jules on 2017/6/27.
  */
 public class HomeActivity extends Activity{
+    private final String TAG="Life_HomeActivity";
     private GridView gv_home;
+    private LinearLayout home_root;
     private String[] mTitleStr;
     private int[] mImgInt;
     @Override
@@ -26,25 +35,57 @@ public class HomeActivity extends Activity{
         initUI();
         initData();
     }
-
+    /**
+     * 初始化动画，淡入
+     */
+    private void initAnimation() {
+        AlphaAnimation alphaAnimation = new AlphaAnimation(0,1);
+        alphaAnimation.setDuration(100);
+//        home_root.startAnimation(alphaAnimation);
+    }
+    /**
+     * 初始化动画，放大
+     */
+    private void itemAnimation() {
+        ScaleAnimation sa = new ScaleAnimation(0.1f,1f,0.1f,1,
+                Animation.RELATIVE_TO_SELF,0.5f,Animation.RELATIVE_TO_SELF,0.5f);
+        sa.setDuration(300);
+        home_root.startAnimation(sa);
+    }
     private void initData() {
         //准备数据
 
         mTitleStr = new String[]{
                 "手机防盗","通讯卫士","软件管理",
                 "进程管理","流量统计","手机杀毒",
-                "缓存清理","手机防盗","手机防盗",
+                "缓存清理","手机防盗","设置中心",
 
         };
 
         mImgInt = new int[]{
                 R.drawable.white_159,R.drawable.white_160,R.drawable.white_161,
                 R.drawable.white_162,R.drawable.white_163,R.drawable.white_164,
-                R.drawable.white_165,R.drawable.white_166,R.drawable.white_167,R.drawable.purple_38
-
+                R.drawable.white_165,R.drawable.white_166,R.drawable.white_52
         };
         //九宫格控件设置数据适配器（等同ListView数据适配器）
         gv_home.setAdapter(new MyAdapter());
+        //设置九宫格中的条目点击事件
+        gv_home.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            //点中列表条目的索引position
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Log.i(TAG,"点击了第"+position+"条");
+                switch (position){
+                    case 0:
+                        break;
+                    case 8://getApplicationContext当前上下文环境所对应的类
+                        Intent intent = new Intent(getApplicationContext(), SettingActivity.class);
+                        startActivity(intent);
+                        break;
+
+                }
+            }
+        });
     }
     class MyAdapter extends BaseAdapter{
         @Override
@@ -59,18 +100,19 @@ public class HomeActivity extends Activity{
 
         @Override
         public long getItemId(int i) {
-            return 0;
+            return i;
         }
 
         @Override
         public View getView(int i, View convertView, ViewGroup viewGroup) {
             View view= View.inflate(getApplicationContext(), R.layout.gridview_item, null);
             //有错
-            TextView tv_title= (TextView)view.findViewById(R.id.tv_title);
-            ImageView iv_icon =(ImageView)view.findViewById(R.id.iv_icon);
+            Log.i(TAG,"i="+i);
+            TextView tv_title= view.findViewById(R.id.tv_title);
+            ImageView iv_icon = view.findViewById(R.id.iv_icon);
             tv_title.setText(mTitleStr[i]);
             iv_icon.setBackgroundResource(mImgInt[i]);
-            return null;
+            return view;
         }
 
         @Override
@@ -80,5 +122,6 @@ public class HomeActivity extends Activity{
     }
     private void initUI() {
         gv_home=(GridView) findViewById(R.id.gv_home);
+        home_root=findViewById(R.id.home_root);
     }
 }
