@@ -1,5 +1,6 @@
 package activity;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -162,7 +163,8 @@ public class SplashActivity extends AppCompatActivity {
             path = Environment.getExternalStorageDirectory().getAbsolutePath() +
                     File.separator + "KMSafe20.apk";
         }else {*/
-            File apkfile = new File("/KMSafe21.apk");
+//            File apkfile = new File("KMSafe21.apk");
+            File apkfile = getDir("KMSafe21.apk", Context.MODE_ENABLE_WRITE_AHEAD_LOGGING);
             path=apkfile.getAbsolutePath();
 //        }
         Log.i(TAG,"path:"+path);
@@ -177,6 +179,7 @@ public class SplashActivity extends AppCompatActivity {
                 public void onSuccess(ResponseInfo<File> responseInfo) {
                     //下载成功（下载成功放在sdk卡中的apk）
                     Log.i(TAG,"下载成功");
+
                     File file = responseInfo.result;
                     //提示用户安装
                     installApk(file);

@@ -122,7 +122,7 @@ public class HomeActivity extends Activity{
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         final AlertDialog dialog =builder.create();
         final View view = View.inflate(this,R.layout.dialog_confirm_psd,null);
-        dialog.setView(view);
+        dialog.setView(view,0,0,0,0);
         dialog.show();
 
         Button bt_submit = view.findViewById(R.id.bt_sumit);
@@ -137,7 +137,8 @@ public class HomeActivity extends Activity{
                 Log.i(TAG,"MD5util.encoder(confirmPsd):"+MD5util.encoder(confirmPsd));
                 if (!(TextUtils.isEmpty(confirmPsd))){
                     if (psd.equals(MD5util.encoder(confirmPsd))){
-                        Intent intent = new Intent(HomeActivity.this, TestActivity.class);
+//                        Intent intent = new Intent(HomeActivity.this, TestActivity.class);
+                        Intent intent = new Intent(HomeActivity.this, SetupOverActivity.class);
                         startActivity(intent);//主界面不要finish，便于回退
 
                     }else{
@@ -175,7 +176,8 @@ public class HomeActivity extends Activity{
                 Log.i(TAG,"confirmPsd"+confirmPsd);
                 if (!(TextUtils.isEmpty(psd)&&TextUtils.isEmpty(confirmPsd))){
                     if (psd.equals(confirmPsd)){
-                        Intent intent = new Intent(HomeActivity.this, TestActivity.class);
+//                        Intent intent = new Intent(HomeActivity.this, TestActivity.class);
+                        Intent intent = new Intent(HomeActivity.this, SetupOverActivity.class);
                         startActivity(intent);//主界面不要finish，便于回退
                         SpUtils.putString(HomeActivity.this,ConstantValue.MOBILE_SAFE_PSD, MD5util.encoder(psd));
                     }else{

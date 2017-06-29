@@ -19,4 +19,17 @@
         <item name="android:textSize">30sp</item>
         <item name="android:padding">5dp</item>
     </style>
+<!--    <TextView
+        android:drawableLeft="@drawable/item_icon"
+        android:layout_height="wrap_content" />-->
+    <style name="ItemStyle">
+        <!-- Customize your theme here. -->
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">#000</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:layout_margin">5dp</item>
+        <item name="android:drawableLeft">@drawable/item_icon</item>
+    </style>
 </resources>
