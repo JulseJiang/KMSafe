@@ -26,7 +26,9 @@ import com.julse.jules.kmsafe.R;
 import org.w3c.dom.Text;
 
 import util.ConstantValue;
+import util.MD5util;
 import util.SpUtils;
+import util.ToastUtil;
 
 /**
  * Created by jules on 2017/6/27.
@@ -58,7 +60,7 @@ public class HomeActivity extends Activity{
     private void itemAnimation() {
         ScaleAnimation sa = new ScaleAnimation(0.1f,1f,0.1f,1,
                 Animation.RELATIVE_TO_SELF,0.5f,Animation.RELATIVE_TO_SELF,0.5f);
-        sa.setDuration(300);
+        sa.setDuration(3000);
         home_root.startAnimation(sa);
     }
     private void initData() {
@@ -108,7 +110,7 @@ public class HomeActivity extends Activity{
             showSetPsdDealog();
         }else {
             Log.i(TAG,"弹出确认密码框");
-            showConfirmPsdDialog();
+            showConfirmPsdDialog(psd);
         }
 
     }
@@ -116,8 +118,38 @@ public class HomeActivity extends Activity{
     /**
      * 设置密码对话框
      */
-    private void showConfirmPsdDialog() {
+    private void showConfirmPsdDialog(final String psd) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final AlertDialog dialog =builder.create();
+        final View view = View.inflate(this,R.layout.dialog_confirm_psd,null);
+        dialog.setView(view);
+        dialog.show();
 
+        Button bt_submit = view.findViewById(R.id.bt_sumit);
+        Button bt_cancel = view.findViewById(R.id.bt_cancel);
+        bt_submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText et_confirm_psd = view.findViewById(R.id.et_confirm_psd);
+                String confirmPsd = et_confirm_psd.getText().toString();
+                Log.i(TAG,"psd"+psd);
+                Log.i(TAG,"confirmPsd"+confirmPsd);
+                Log.i(TAG,"MD5util.encoder(confirmPsd):"+MD5util.encoder(confirmPsd));
+                if (!(TextUtils.isEmpty(confirmPsd))){
+                    if (psd.equals(MD5util.encoder(confirmPsd))){
+                        Intent intent = new Intent(HomeActivity.this, TestActivity.class);
+                        startActivity(intent);//主界面不要finish，便于回退
+
+                    }else{
+                        ToastUtil.show(HomeActivity.this,"密码错误");
+                    }
+                }else{
+                    ToastUtil.show(HomeActivity.this,"输入的密码不能为空");
+                }
+                //结束当前对话框
+                dialog.dismiss();
+            }
+        });
     }
 
     /**
@@ -126,7 +158,7 @@ public class HomeActivity extends Activity{
     private void showSetPsdDealog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         final AlertDialog dialog =builder.create();
-        View view = View.inflate(this,R.layout.dialog_set_psd,null);
+        final View view = View.inflate(this,R.layout.dialog_set_psd,null);
         dialog.setView(view);
         dialog.show();
 
@@ -134,19 +166,27 @@ public class HomeActivity extends Activity{
         Button bt_cancel = view.findViewById(R.id.bt_cancel);
         bt_submit.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                EditText et_set_psd = findViewById(R.id.et_set_psd);
-                EditText et_confirm_psd = findViewById(R.id.et_confirm_psd);
-
+            public void onClick(View v) {
+                EditText et_set_psd = view.findViewById(R.id.et_set_psd);
+                EditText et_confirm_psd = view.findViewById(R.id.et_confirm_psd);
                 String psd = et_set_psd.getText().toString();
                 String confirmPsd = et_confirm_psd.getText().toString();
-
+                Log.i(TAG,"psd"+psd);
+                Log.i(TAG,"confirmPsd"+confirmPsd);
                 if (!(TextUtils.isEmpty(psd)&&TextUtils.isEmpty(confirmPsd))){
                     if (psd.equals(confirmPsd)){
                         Intent intent = new Intent(HomeActivity.this, TestActivity.class);
                         startActivity(intent);//主界面不要finish，便于回退
+                        SpUtils.putString(HomeActivity.this,ConstantValue.MOBILE_SAFE_PSD, MD5util.encoder(psd));
+                    }else{
+                        ToastUtil.show(HomeActivity.this,"两次输入密码不一致");
+
                     }
+                }else{
+                    ToastUtil.show(HomeActivity.this,"两次输入的密码不能为空");
                 }
+                //结束当前对话框
+                dialog.dismiss();
             }
         });
     }

@@ -1,5 +1,7 @@
 package util;
 
+import android.util.Log;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -9,7 +11,7 @@ import java.security.NoSuchAlgorithmException;
  */
 public class MD5util {
     private static String salt="kfjakdfjad";//加盐,增加密码破解难度
-    public static  void encoder(String psd){
+    public static  String encoder(String psd){
         psd=psd+salt;
         try {
             //指定加密算法类型
@@ -29,11 +31,12 @@ public class MD5util {
                 }
                 sb.append(hexString);
             }
-            System.out.print(sb.toString());
+            Log.i("Life","加密成功："+sb.toString());
+            return sb.toString();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-
+        return null;
     }
 
     public void setSalt(String salt) {
