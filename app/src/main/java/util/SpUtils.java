@@ -41,5 +41,35 @@ public class SpUtils {
         return sp.getBoolean(key,defValue);
 
     }
+    /**
+     * 写入boolean类型变量到sp中
+     * @param ctx 上下文
+     * @param key 键
+     * @param value 值
+     */
+    public  static  void putString(Context ctx,String key,String value){
+        //存储节点文件的名称，读写方式
+        if (sp==null){
+            sp = ctx.getSharedPreferences("config", Context.MODE_PRIVATE);
+        }
+        sp.edit().putString(key,value).commit();
+
+    }
+    //读
+
+    /**
+     * 读取boolean类型的标识
+     * @param ctx 上下文
+     * @param key 键
+     * @param defValue 值:默认值或者此节点读取到的结果
+     */
+    public  static  String getString(Context ctx,String key,String defValue){
+        //存储节点文件的名称，读写方式
+        if (sp==null){
+            sp = ctx.getSharedPreferences("config", Context.MODE_PRIVATE);
+        }
+        return sp.getString(key,defValue);
+
+    }
 }
 

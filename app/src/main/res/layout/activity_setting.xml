@@ -41,9 +41,22 @@
         android:layout_marginTop="10dp"
         android:layout_height="1dp"
         android:background="@color/colorAccent"/>-->
-    <View.SettingItemView
+    <view.SettingItemView
+        xmlns:kmsafe="http://schemas.android.com/apk/res/com.julse.jules.kmsafe"
         android:id="@+id/siv_update"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </View.SettingItemView>
+        android:layout_height="wrap_content"
+        kmsafe:destitle = "自动更新设置"
+        kmsafe:desoff = "自动更新已关闭"
+        kmsafe:deson = "自动更新已开启">
+    </view.SettingItemView>
+    <view.SettingItemView
+        xmlns:kmsafe="http://schemas.android.com/apk/res/com.julse.jules.kmsafe"
+        android:id="@+id/siv_local_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        kmsafe:destitle = "电话归属地的显示设置"
+        kmsafe:desoff = "归属地的显示已关闭"
+        kmsafe:deson = "归属地的显示已关闭">
+    </view.SettingItemView>
 </LinearLayout>

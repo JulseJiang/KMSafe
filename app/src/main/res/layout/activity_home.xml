@@ -22,7 +22,7 @@
         android:marqueeRepeatLimit="marquee_forever"
 
         />-->
-    <View.FocusTextView
+    <view.FocusTextView
         android:text="Discover interesting projects and people to populate your personal news feed.Your news ."
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

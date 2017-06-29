@@ -1,8 +1,10 @@
 package activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,8 @@ import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -18,6 +22,11 @@ import android.widget.TextView;
 
 
 import com.julse.jules.kmsafe.R;
+
+import org.w3c.dom.Text;
+
+import util.ConstantValue;
+import util.SpUtils;
 
 /**
  * Created by jules on 2017/6/27.
@@ -77,6 +86,9 @@ public class HomeActivity extends Activity{
                 Log.i(TAG,"点击了第"+position+"条");
                 switch (position){
                     case 0:
+                        //开启防盗功能
+                        Log.i(TAG,"开启防盗功能");
+                        showDialog();
                         break;
                     case 8://getApplicationContext当前上下文环境所对应的类
                         Intent intent = new Intent(getApplicationContext(), SettingActivity.class);
@@ -87,6 +99,58 @@ public class HomeActivity extends Activity{
             }
         });
     }
+    protected void showDialog(){
+        //判断本地是否存储有密码，是：初次进入，没有密码，需要设置密码
+        //否，非初次，有密码，需要确认密码
+        String psd = SpUtils.getString(this, ConstantValue.MOBILE_SAFE_PSD, "");
+        Log.i(TAG,"psd:"+psd);
+        if (TextUtils.isEmpty(psd)){
+            showSetPsdDealog();
+        }else {
+            Log.i(TAG,"弹出确认密码框");
+            showConfirmPsdDialog();
+        }
+
+    }
+
+    /**
+     * 设置密码对话框
+     */
+    private void showConfirmPsdDialog() {
+
+    }
+
+    /**
+     * 确认密码对话框
+     */
+    private void showSetPsdDealog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final AlertDialog dialog =builder.create();
+        View view = View.inflate(this,R.layout.dialog_set_psd,null);
+        dialog.setView(view);
+        dialog.show();
+
+        Button bt_submit = view.findViewById(R.id.bt_sumit);
+        Button bt_cancel = view.findViewById(R.id.bt_cancel);
+        bt_submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EditText et_set_psd = findViewById(R.id.et_set_psd);
+                EditText et_confirm_psd = findViewById(R.id.et_confirm_psd);
+
+                String psd = et_set_psd.getText().toString();
+                String confirmPsd = et_confirm_psd.getText().toString();
+
+                if (!(TextUtils.isEmpty(psd)&&TextUtils.isEmpty(confirmPsd))){
+                    if (psd.equals(confirmPsd)){
+                        Intent intent = new Intent(HomeActivity.this, TestActivity.class);
+                        startActivity(intent);//主界面不要finish，便于回退
+                    }
+                }
+            }
+        });
+    }
+
     class MyAdapter extends BaseAdapter{
         @Override
         public int getCount() {
