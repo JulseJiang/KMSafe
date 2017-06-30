@@ -19,9 +19,7 @@
         <item name="android:textSize">30sp</item>
         <item name="android:padding">5dp</item>
     </style>
-<!--    <TextView
-        android:drawableLeft="@drawable/item_icon"
-        android:layout_height="wrap_content" />-->
+
     <style name="ItemStyle">
         <!-- Customize your theme here. -->
         <item name="android:layout_width">match_parent</item>
@@ -31,5 +29,33 @@
         <item name="android:textSize">18sp</item>
         <item name="android:layout_margin">5dp</item>
         <item name="android:drawableLeft">@drawable/item_icon</item>
+    </style>
+  <!--  <Button
+        android:layout_alignParentRight="true"
+         />-->
+    <style name="nextBtnStyle">
+        <!-- Customize your theme here. -->
+        <item name="android:text">下一页</item>
+        <item name="android:layout_width">80dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:onClick">nextPage</item>
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:background">@drawable/buttom_ok</item>
+
+    </style>
+
+    <style name="preBtnStyle">
+        <!-- Customize your theme here. -->
+        <item name="android:text">上一页</item>
+        <item name="android:layout_width">80dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:onClick">prePage</item>
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:background">@drawable/button_cancel</item>
+
     </style>
 </resources>

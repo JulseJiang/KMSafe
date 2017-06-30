@@ -48,6 +48,7 @@ public class SettingItemView extends RelativeLayout {
         initAttrs(attrs);
         //获取布局文件中定义的字符串赋值给自定义文字的标题
         tv_title.setText(mDestitle);
+        tv_des.setText(mDesoff);
     }
 
     private void initAttrs(AttributeSet attrs) {
@@ -94,14 +95,14 @@ public class SettingItemView extends RelativeLayout {
      * 设置自动更新是否开启
      * @param isCheck
      */
-    public void setCheck(boolean isCheck,String item){
+    public void setCheck(boolean isCheck){
         cb_box.setChecked(isCheck);
         if (isCheck){
             tv_des.setText(mDeson);
-            SpUtils.putBoolean(context, item,true);
+//            SpUtils.putBoolean(context, item,true);
         }else {
             tv_des.setText(mDesoff);
-            SpUtils.putBoolean(context, item,false);
+//            SpUtils.putBoolean(context, item,false);
         }
     }
 }

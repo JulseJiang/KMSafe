@@ -20,5 +20,9 @@ public class ConstantValue {
     /**
      * 是否设置完成
      */
-    public static  final  String SETUP_OVER="SETUP_OVER";
+    public static  final  String SETUP_OVER="setup_over";
+    /**
+     * 邦定的手机卡号
+     */
+    public static  final  String SIM_NUMBER="sim_number";
 }

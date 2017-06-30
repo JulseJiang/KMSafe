@@ -57,6 +57,6 @@
         android:layout_height="wrap_content"
         kmsafe:destitle = "电话归属地的显示设置"
         kmsafe:desoff = "归属地的显示已关闭"
-        kmsafe:deson = "归属地的显示已关闭">
+        kmsafe:deson = "归属地的显示已开启">
     </view.SettingItemView>
 </LinearLayout>

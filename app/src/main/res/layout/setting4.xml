@@ -3,4 +3,52 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:text="4.恭喜您设置完成"
+        style="@style/TitleStyle"
+        android:id="@+id/textView" />
+
+    <CheckBox
+        android:layout_marginTop="10dp"
+        android:id="@+id/cb_box"
+        android:text="您还没有开启防盗保护"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:background="@android:drawable/presence_invisible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <ImageView
+            android:background="@android:drawable/presence_invisible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <ImageView
+            android:background="@android:drawable/presence_invisible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <ImageView
+            android:background="@android:drawable/presence_online"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:src="@drawable/minman"
+            android:layout_centerInParent="true"
+            android:layout_width="120dp"
+            android:layout_height="120dp" />
+        <Button
+            android:id="@+id/pre_btn"
+            style="@style/preBtnStyle" />
+        <Button
+            android:id="@+id/next_btn"
+            style="@style/nextBtnStyle" />
+    </RelativeLayout>
 </LinearLayout>

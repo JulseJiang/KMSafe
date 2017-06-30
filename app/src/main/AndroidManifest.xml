@@ -6,8 +6,10 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <!--全文动画缩放动画权限-->
     <uses-permission android:name="android.permission.SET_ANIMATION_SCALE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
     <!--文件挂载权限-->
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
+    <!--<uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>-->
     <!--存储在本地文件中-->
    <!-- <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
@@ -35,6 +37,10 @@
         <activity android:name="activity.TestActivity"/>
         <activity android:name="activity.SetupOverActivity"/>
         <activity android:name="activity.Setup1Activity"/>
+        <activity android:name="activity.Setup2Activity"/>
+        <activity android:name="activity.Setup3Activity"/>
+        <activity android:name="activity.Setup4Activity"/>
+        <activity android:name="activity.ContactListActivity"/>
     </application>
 
 </manifest>
