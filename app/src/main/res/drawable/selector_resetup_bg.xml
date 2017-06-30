@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_pressed="true" android:drawable="#f80" />
-    <item android:drawable="#f00"/>
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <solid android:color="#b4a0f5"/>
+            <corners android:radius="10dip"/>
+
+        </shape>
+    </item>
+
 </selector>

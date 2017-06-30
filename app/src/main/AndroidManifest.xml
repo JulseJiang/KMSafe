@@ -6,8 +6,14 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <!--全文动画缩放动画权限-->
     <uses-permission android:name="android.permission.SET_ANIMATION_SCALE"/>
+    <!--读手机卡的权限-->
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <!--读手机联系人的权限-->
     <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <!--接收手机重启广播的权限-->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <!--发送短信的权限-->
+    <uses-permission android:name="android.permission.SEND_SMS"/>
     <!--文件挂载权限-->
     <!--<uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>-->
     <!--存储在本地文件中-->
@@ -41,6 +47,11 @@
         <activity android:name="activity.Setup3Activity"/>
         <activity android:name="activity.Setup4Activity"/>
         <activity android:name="activity.ContactListActivity"/>
+        <receiver android:name="receiver.BootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

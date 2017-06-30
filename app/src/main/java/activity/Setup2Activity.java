@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 
 import com.julse.jules.kmsafe.R;
@@ -18,13 +19,38 @@ import view.SettingItemView;
 /**
  * Created by jules on 2017/6/30.
  */
-public class Setup2Activity extends Activity{
+public class Setup2Activity extends BaseSetupActivity{
     private SettingItemView siv_sim_bound;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting2);
         initUI();
+    }
+
+    @Override
+    public void showNextPage() {
+        String serialNumber = SpUtils.getString(this,ConstantValue.SIM_NUMBER,"");
+        if (!(TextUtils.isEmpty(serialNumber))){
+            Intent intent = new Intent(getApplicationContext(), Setup3Activity.class);
+            startActivity(intent);
+            finish();
+            //开启平移动画
+//            overridePendingTransition(R.anim.next_in_anim,R.anim.next_out_anim);
+        }
+        else{
+            ToastUtil.show(this,"请绑定sim卡");
+        }
+
+    }
+
+    @Override
+    public void showPrePage() {
+        Intent intent = new Intent(getApplicationContext(), Setup1Activity.class);
+        startActivity(intent);
+        finish();
+        //开启平移动画
+//        overridePendingTransition(R.anim.pre_in_anim,R.anim.pre_out_anim);
     }
 
     private void initUI() {
@@ -42,6 +68,7 @@ public class Setup2Activity extends Activity{
             public void onClick(View view) {
                 //获取原有状态
                 boolean isCheck = siv_sim_bound.isCheck();
+                Log.i("Life","现在check box的状态是："+isCheck);
                 //状态取反，并设置给当前条目
                 siv_sim_bound.setCheck(!isCheck);
                 if(!isCheck){
@@ -54,6 +81,8 @@ public class Setup2Activity extends Activity{
                     //存储
                     SpUtils.putString(getApplicationContext(),
                             ConstantValue.SIM_NUMBER,simSerialNumber);
+                    Log.i("Life","simSerialNumber"+simSerialNumber);
+                    SpUtils.putBoolean(getApplication(), ConstantValue.SIM_NUMBER,!isCheck);
                 }else {
                     //删除节点
                     SpUtils.remove(getApplicationContext(),
@@ -63,20 +92,4 @@ public class Setup2Activity extends Activity{
         });
     }
 
-    public void nextPage(View view){
-        String serialNumber = SpUtils.getString(this,ConstantValue.SIM_NUMBER,"");
-        if (!(TextUtils.isEmpty(serialNumber))){
-            Intent intent = new Intent(getApplicationContext(), Setup3Activity.class);
-            startActivity(intent);
-            finish();
-        }
-        else{
-            ToastUtil.show(this,"请绑定sim卡");
-        }
-    }
-    public void prePage(View view){
-        Intent intent = new Intent(getApplicationContext(), Setup1Activity.class);
-        startActivity(intent);
-        finish();
-    }
 }

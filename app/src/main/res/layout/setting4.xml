@@ -46,7 +46,8 @@
             android:layout_height="120dp" />
         <Button
             android:id="@+id/pre_btn"
-            style="@style/preBtnStyle" />
+            style="@style/preBtnStyle"
+            />
         <Button
             android:id="@+id/next_btn"
             style="@style/nextBtnStyle" />

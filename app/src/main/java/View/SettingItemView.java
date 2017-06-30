@@ -31,6 +31,7 @@ public class SettingItemView extends RelativeLayout {
     public SettingItemView(Context context) {
         super(context,null);
         Log.i(TAG,".........SettingItemView(1)........");
+
     }
 
     public SettingItemView(Context context, AttributeSet attrs) {
@@ -51,6 +52,19 @@ public class SettingItemView extends RelativeLayout {
         tv_des.setText(mDesoff);
     }
 
+    public SettingItemView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        Log.i(TAG,".........SettingItemView(3)........");
+/*        //xml-->view  this需要挂载在别的界面中
+        View.inflate(context, R.layout.setting_item_view,this);
+//        等效于
+*//*      View view = View.inflate(context, R.layout.setting_item_view,null);
+        this.addView(view);*//*
+        tv_title = findViewById(R.id.tv_title);
+        tv_des = findViewById(R.id.tv_des);
+        cb_box = findViewById(R.id.cb_box);*/
+
+    }
     private void initAttrs(AttributeSet attrs) {
         Log.i(TAG,"获取自定义属性个数：attrs.getAttributeCount()"+attrs.getAttributeCount());
 //        获取属性名称以及属性值
@@ -68,21 +82,6 @@ public class SettingItemView extends RelativeLayout {
         Log.i(TAG,"mDesoff"+mDesoff);
         Log.i(TAG,"mDeson"+mDeson);
     }
-
-    public SettingItemView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        Log.i(TAG,".........SettingItemView(3)........");
-/*        //xml-->view  this需要挂载在别的界面中
-        View.inflate(context, R.layout.setting_item_view,this);
-//        等效于
-*//*      View view = View.inflate(context, R.layout.setting_item_view,null);
-        this.addView(view);*//*
-        tv_title = findViewById(R.id.tv_title);
-        tv_des = findViewById(R.id.tv_des);
-        cb_box = findViewById(R.id.cb_box);*/
-
-    }
-
     /**
      * 返回当前SettingItemView是否为选中状态
      * @return true：选中，false:未选中

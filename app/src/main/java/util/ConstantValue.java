@@ -22,7 +22,15 @@ public class ConstantValue {
      */
     public static  final  String SETUP_OVER="setup_over";
     /**
-     * 邦定的手机卡号
+     * 绑定的手机sim序列号
      */
     public static  final  String SIM_NUMBER="sim_number";
+    /**
+     * 联系人电话号码
+     */
+    public static final String CONTACT_PHONE_NUMBER = "contact_phone_number";
+    /**
+     * 是否开启防盗保护
+     */
+    public static String OPEN_SECURITY ="open_security";
 }
