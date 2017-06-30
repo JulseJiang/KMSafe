@@ -9,6 +9,7 @@ import android.util.Log;
 
 import util.ConstantValue;
 import util.SpUtils;
+import util.ToastUtil;
 
 /**
  * 监听手机重启的广播
@@ -20,11 +21,9 @@ public class BootReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.i("Life","接收到手机重启的广播");
-        //发送短信给选中的联系人号码
-        SmsManager sms = SmsManager.getDefault();
-        //5556：手机中是电话号码，模拟器中是端口号
-        sms.sendTextMessage("5558",null,"sim change!",null,null);
-        /*//获取手机开机后的sim卡序列号
+        ToastUtil.show(context,"我收到了手机重启的广播");
+
+        //获取手机开机后的sim卡序列号
         TelephonyManager tm = (TelephonyManager)
                 context.getSystemService(Context.TELEPHONY_SERVICE);
         String simSerialNumber=tm.getSimSerialNumber();
@@ -34,8 +33,9 @@ public class BootReceiver extends BroadcastReceiver {
         if (!simSerialNumber.equals(sim_number)){
             //发送短信给选中的联系人号码
             SmsManager sms = SmsManager.getDefault();
+            String phone = SpUtils.getString(context,ConstantValue.CONTACT_PHONE_NUMBER,"");
             //5556：手机中是电话号码，模拟器中是端口号
-            sms.sendTextMessage("5558",null,"sim change!",null,null);
-        }*/
+            sms.sendTextMessage(phone,null,"sim change!",null,null);
+        }
     }
 }

@@ -24,7 +24,7 @@ public class SetupOverActivity extends Activity{
         //密码输入成功，并且四个导航界面设置完成--->停留在设置完成的功能列表界面
         //密码输入成功，四个导航界面没有设置完成--->跳转到导航界面1
         boolean setup_over = SpUtils.getBoolean(this, ConstantValue.SETUP_OVER, false);
-        if (!setup_over){
+        if (setup_over){
             setContentView(R.layout.activity_setup_over);
             initUI();
         }else {
@@ -39,6 +39,7 @@ public class SetupOverActivity extends Activity{
         String phone = SpUtils.getString(this,ConstantValue.CONTACT_PHONE_NUMBER,"");
         tv_phone=findViewById(R.id.tv_phone);
         tv_phone.setText(phone);
+        //重新设置条目被点击
         tv_reset_setup=findViewById(R.id.tv_reset_setup);
         tv_reset_setup.setOnClickListener(new View.OnClickListener() {
             @Override

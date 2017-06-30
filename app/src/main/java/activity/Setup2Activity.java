@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -31,7 +32,9 @@ public class Setup2Activity extends BaseSetupActivity{
     @Override
     public void showNextPage() {
         String serialNumber = SpUtils.getString(this,ConstantValue.SIM_NUMBER,"");
+        Log.i("Life2","序列号为"+serialNumber);
         if (!(TextUtils.isEmpty(serialNumber))){
+
             Intent intent = new Intent(getApplicationContext(), Setup3Activity.class);
             startActivity(intent);
             finish();
@@ -82,7 +85,6 @@ public class Setup2Activity extends BaseSetupActivity{
                     SpUtils.putString(getApplicationContext(),
                             ConstantValue.SIM_NUMBER,simSerialNumber);
                     Log.i("Life","simSerialNumber"+simSerialNumber);
-                    SpUtils.putBoolean(getApplication(), ConstantValue.SIM_NUMBER,!isCheck);
                 }else {
                     //删除节点
                     SpUtils.remove(getApplicationContext(),

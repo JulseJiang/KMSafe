@@ -14,6 +14,24 @@
         android:text="您还没有开启防盗保护"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+    <View
+        android:background="@color/colorPrimaryDark"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="5dp"/>
+    <CheckBox
+        android:layout_marginTop="10dp"
+        android:id="@+id/cb_send"
+        android:text="发送短信给选中的联系人，内容如下："
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <EditText
+        android:id="@+id/et_send"
+        android:layout_marginTop="10dp"
+        android:textSize="18sp"
+        android:hint="我把你设置成了我的紧急联系人\n如果手机丢了就全靠你找回咯\n"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
     <LinearLayout
         android:gravity="center_horizontal"
         android:layout_width="match_parent"
@@ -36,6 +54,7 @@
             android:layout_height="wrap_content" />
 
     </LinearLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
