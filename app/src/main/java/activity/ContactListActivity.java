@@ -1,6 +1,7 @@
 package activity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
@@ -15,7 +16,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.julse.jules.kmsafe.R;
@@ -33,10 +36,13 @@ public class ContactListActivity extends Activity{
     private List<HashMap<String,String>> contactList = new ArrayList<>();
     private final String TAG="Life_ContactL";
     private MyAdapter mAdapter;
+    private ProgressBar progressbar;
+    private LinearLayout root_layout;
     private Handler mhandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            root_layout.removeView(progressbar);
             mAdapter = new MyAdapter();
             lv_contact.setAdapter(mAdapter);
         }
@@ -50,6 +56,8 @@ public class ContactListActivity extends Activity{
     }
     private void initUI() {
         lv_contact = findViewById(R.id.lv_contact);
+        progressbar=findViewById(R.id.progress);
+        root_layout=findViewById(R.id.root);
         lv_contact.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -69,6 +77,7 @@ public class ContactListActivity extends Activity{
      * 获取联系人数据
      */
     private void initData() {
+
         //读取联系人，可能是一个耗时操作，放到子线程中处理
         new Thread(){
             @Override
@@ -161,9 +170,18 @@ public class ContactListActivity extends Activity{
                 // 发送一个空的消息，用状态码告诉主线程集合准备完毕，可以填充数据适配器了
                 mhandler.sendEmptyMessage(0);
             }
+
         }.start();
 
     }
+
+/*    *//**
+     * 关闭加载对话框
+     *//*
+    private void closeProgressDialog(){
+        Log.i(TAG,"关闭进度对话框");
+        root_layout.removeView(progressbar);
+    }*/
 
     private class MyAdapter extends BaseAdapter{
 
@@ -192,4 +210,5 @@ public class ContactListActivity extends Activity{
             return view;
         }
     }
+
 }
