@@ -55,6 +55,7 @@
         <activity android:name="activity.Setup3Activity"/>
         <activity android:name="activity.Setup4Activity"/>
         <activity android:name="activity.ContactListActivity"/>
+        <activity android:name="activity.DeviceAdminActivity"/>
         <receiver android:name="receiver.BootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
@@ -66,6 +67,16 @@
                  高版本为了安全，取消了自动关联-->
             <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
             </intent-filter>
+        </receiver>
+        <!--设备管理器测试广播-->
+        <!--android.app.admin 这个是自动提示的-->
+        <!--android:permission="android.permission.BIND_DEVICE_ADMIN" 非自动提示-->
+        <receiver android:name="receiver.DeviceAdmin"
+            android:label="@string/sample_device_admin"
+            android:description="@string/sample_device_admin_description"
+            android:permission="android.permission.BIND_DEVICE_ADMIN">
+            <meta-data android:name="android.app.device_admin"
+                android:resource="@xml/device_admin_sample"/>
         </receiver>
         <service android:name="service.LocationService"/>
     </application>

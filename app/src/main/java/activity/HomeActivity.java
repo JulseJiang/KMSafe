@@ -94,9 +94,14 @@ public class HomeActivity extends Activity{
                         showDialog();
                         break;
                     case 1:
-                        Log.i(TAG,"播放音乐");
+                        Log.i(TAG,"定位");
                         Intent intent1 = new Intent(getApplicationContext(),TestActivity.class);
                         startActivity(intent1);
+                        break;
+                    case 2:
+                        Log.i(TAG,"激活设备管理器");
+                        Intent intent2 = new Intent(getApplicationContext(),DeviceAdminActivity.class);
+                        startActivity(intent2);
                         break;
                     case 8://getApplicationContext当前上下文环境所对应的类
                         Intent intent = new Intent(getApplicationContext(), SettingActivity.class);
