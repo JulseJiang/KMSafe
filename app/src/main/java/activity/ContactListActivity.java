@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -73,8 +74,27 @@ public class ContactListActivity extends Activity{
             @Override
             public void run() {
                 super.run();
-                //获取内瓤解析器对象
+                //获取内容解析器对象
                 ContentResolver contentResolver = getContentResolver();
+               /* //---测试代码
+
+                Uri uri = ContactsContract.Contacts.CONTENT_URI;
+                Log.i(TAG,"通过系统提供的URI查询:"+uri);
+                Cursor mycursor = contentResolver.query(uri,
+                        new String[]{"contact_id"},
+                        null,//查询列
+                        null,//筛选
+                        null//默认排序方式
+
+                );
+                while(mycursor.moveToNext()){
+                    String column = mycursor.getColumnName(1);
+                    String value = mycursor.getString(0);
+                    Log.i(TAG,"column:"+column+" value:"+value);
+
+                }
+                mycursor.close();
+                //测试代码-----*/
                 //查询系统联系人数据库表过程（要添加读取联系人权限）--第一张表
                 Cursor cursor = contentResolver.query(Uri.parse(
                         "content://com.android.contacts/raw_contacts"),
@@ -90,8 +110,9 @@ public class ContactListActivity extends Activity{
                     String id = cursor.getString(0);
 //                    Log.i(TAG,"联系人id:"+id);
                     //根据用用户唯一性id值，查询data表生成的视图，获取data以及mimetype字段--第二张表
-                   /* Cursor indexCursor = contentResolver.query(Uri.parse(
-                            "content://com.android.contacts/raw_contacts"),
+
+                    Cursor indexCursor = contentResolver.query(Uri.parse(
+                            "content://com.android.contacts/data"),
                             new String[]{"data1", "mimetype"},//Invalid column data1
                             "raw_contact_id = ?",
                             new String[]{id},
@@ -116,11 +137,11 @@ public class ContactListActivity extends Activity{
                             }
                         }
                     }
-                    indexCursor.close();*/
+                    indexCursor.close();
                     //---测试代码
-                    HashMap<String, String> hashMap = new HashMap<>();
+                   /* HashMap<String, String> hashMap = new HashMap<>();
                     hashMap.put("phone","15310320113");
-                    hashMap.put("name","julse");
+                    hashMap.put("name","julse");*/
                     //---测试结束
                     contactList.add(hashMap);
                 }

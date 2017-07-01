@@ -73,6 +73,7 @@ public class Setup4Activity extends BaseSetupActivity{
         et_send=findViewById(R.id.et_send);
         //回显
         boolean open_security = SpUtils.getBoolean(this, ConstantValue.OPEN_SECURITY, false);
+        cb_box.setChecked(open_security);
         if (open_security){
             cb_box.setText("安全防盗已开启");
         }else {

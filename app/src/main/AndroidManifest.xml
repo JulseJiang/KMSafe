@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.julse.jules.kmsafe">
-
+    <!--获取准确GPS坐标权限-->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <!--网络定位时获取粗略坐标的权限-->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <!--网络权限-->
     <uses-permission android:name="android.permission.INTERNET"/>
+    <!--写入内存卡权限-->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <!--全文动画缩放动画权限-->
     <uses-permission android:name="android.permission.SET_ANIMATION_SCALE"/>
@@ -50,6 +55,13 @@
         <receiver android:name="receiver.BootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+        <receiver android:name="receiver.SimReceiver">
+            <intent-filter>
+                <!--为了去关联系统短信的广播对应的过滤条件，先将编译版本改为4.1.2,
+                 高版本为了安全，取消了自动关联-->
+            <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
             </intent-filter>
         </receiver>
     </application>
