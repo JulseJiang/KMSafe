@@ -76,55 +76,61 @@ public class ContactListActivity extends Activity{
                 super.run();
                 //获取内容解析器对象
                 ContentResolver contentResolver = getContentResolver();
-               /* //---测试代码
-
-                Uri uri = ContactsContract.Contacts.CONTENT_URI;
-                Log.i(TAG,"通过系统提供的URI查询:"+uri);
-                Cursor mycursor = contentResolver.query(uri,
-                        new String[]{"contact_id"},
-                        null,//查询列
-                        null,//筛选
-                        null//默认排序方式
-
-                );
-                while(mycursor.moveToNext()){
-                    String column = mycursor.getColumnName(1);
-                    String value = mycursor.getString(0);
-                    Log.i(TAG,"column:"+column+" value:"+value);
-
-                }
-                mycursor.close();
-                //测试代码-----*/
                 //查询系统联系人数据库表过程（要添加读取联系人权限）--第一张表
                 Cursor cursor = contentResolver.query(Uri.parse(
                         "content://com.android.contacts/raw_contacts"),
-                        new String[]{"contact_id"},
-                        null,//查询列
+                        new String[]{"contact_id"},//查询列
+                        null,//查询列条件
                         null,//筛选
                         null//默认排序方式
 
                 );
                 contactList.clear();
                 //循环游标，直到没有数据为止
+                int i =0;
                 while (cursor.moveToNext()){
+                    i++;
                     String id = cursor.getString(0);
-//                    Log.i(TAG,"联系人id:"+id);
+                    if(TextUtils.isEmpty(id)) {
+                        continue;
+                    }
+                    Log.i(TAG,"联系人id:"+id);
                     //根据用用户唯一性id值，查询data表生成的视图，获取data以及mimetype字段--第二张表
-
                     Cursor indexCursor = contentResolver.query(Uri.parse(
                             "content://com.android.contacts/data"),
-                            new String[]{"data1", "mimetype"},//Invalid column data1
+                            new String[]{"data1", "mimetype"},
                             "raw_contact_id = ?",
                             new String[]{id},
                             null
                     );
+                    /**
+                     * 能查询到表中的第一条消息，
+                     * data:
+                     * 07-01 16:04:37.987 15770-16022/com.julse.jules.kmsafe I/Life_ContactL: data:OPPO官方客服
+                     07-01 16:04:37.997 15770-16022/com.julse.jules.kmsafe I/Life_ContactL: data:4001666888
+                     07-01 16:04:37.997 15770-16022/com.julse.jules.kmsafe I/Life_ContactL: data:www.oppo.com
+                     07-01 16:04:37.997 15770-16022/com.julse.jules.kmsafe I/Life_ContactL: data:null
+                     *
+                     * mimtype:
+                     * 07-01 16:04:37.997 15770-16022/com.julse.jules.kmsafe I/Life_ContactL: mimetype:vnd.android.cursor.item/name
+                     07-01 16:04:37.997 15770-16022/com.julse.jules.kmsafe I/Life_ContactL: column1:mimetype
+                     07-01 16:04:37.997 15770-16022/com.julse.jules.kmsafe I/Life_ContactL: mimetype:vnd.android.cursor.item/phone_v2
+                     07-01 16:04:37.997 15770-16022/com.julse.jules.kmsafe I/Life_ContactL: column1:mimetype
+                     07-01 16:04:37.997 15770-16022/com.julse.jules.kmsafe I/Life_ContactL: mimetype:vnd.android.cursor.item/website
+                     07-01 16:04:37.997 15770-16022/com.julse.jules.kmsafe I/Life_ContactL: column1:mimetype
+                     07-01 16:04:37.997 15770-16022/com.julse.jules.kmsafe I/Life_ContactL: mimetype:vnd.android.cursor.item/photo
+                     07-01 16:04:37.997 15770-16022/com.julse.jules.kmsafe I/Life_ContactL: column1:mimetype
+                     *
+                     * 不能查询到第二行
+                     * IllegalArgumentException: the bind value at index 1 is null
+                     at android.database.sqlite.SQLiteProgram.bindString(SQLiteProgram.java:164)
+                     */
                     HashMap<String, String> hashMap = new HashMap<>();
                     while (indexCursor.moveToNext()){
                         String data = indexCursor.getString(0);
                         String type=indexCursor.getString(1);
                         Log.i(TAG,"data:"+data);
                         Log.i(TAG,"mimetype:"+type);
-
                         //区分类型以填充适配器
                         if (type.equals("vnd.android.cursor.item/phone_v2")){
                             //判断数据非空
@@ -139,12 +145,17 @@ public class ContactListActivity extends Activity{
                     }
                     indexCursor.close();
                     //---测试代码
-                   /* HashMap<String, String> hashMap = new HashMap<>();
+                    /*HashMap<String, String> hashMap = new HashMap<>();
                     hashMap.put("phone","15310320113");
                     hashMap.put("name","julse");*/
                     //---测试结束
-                    contactList.add(hashMap);
+                    if (!hashMap.isEmpty()){
+                        contactList.add(hashMap);
+                    }
+                    Log.i(TAG,"循环一次查询");
                 }
+
+                Log.i(TAG,"共查到i个联系人：i="+i);
                 cursor.close();
                 //通过消息机制回到主线程处理逻辑,
                 // 发送一个空的消息，用状态码告诉主线程集合准备完毕，可以填充数据适配器了
