@@ -112,28 +112,7 @@ public class ContactListActivity extends Activity{
                             new String[]{id},
                             null
                     );
-                    /**
-                     * 能查询到表中的第一条消息，
-                     * data:
-                     * 07-01 16:04:37.987 15770-16022/com.julse.jules.kmsafe I/Life_ContactL: data:OPPO官方客服
-                     07-01 16:04:37.997 15770-16022/com.julse.jules.kmsafe I/Life_ContactL: data:4001666888
-                     07-01 16:04:37.997 15770-16022/com.julse.jules.kmsafe I/Life_ContactL: data:www.oppo.com
-                     07-01 16:04:37.997 15770-16022/com.julse.jules.kmsafe I/Life_ContactL: data:null
-                     *
-                     * mimtype:
-                     * 07-01 16:04:37.997 15770-16022/com.julse.jules.kmsafe I/Life_ContactL: mimetype:vnd.android.cursor.item/name
-                     07-01 16:04:37.997 15770-16022/com.julse.jules.kmsafe I/Life_ContactL: column1:mimetype
-                     07-01 16:04:37.997 15770-16022/com.julse.jules.kmsafe I/Life_ContactL: mimetype:vnd.android.cursor.item/phone_v2
-                     07-01 16:04:37.997 15770-16022/com.julse.jules.kmsafe I/Life_ContactL: column1:mimetype
-                     07-01 16:04:37.997 15770-16022/com.julse.jules.kmsafe I/Life_ContactL: mimetype:vnd.android.cursor.item/website
-                     07-01 16:04:37.997 15770-16022/com.julse.jules.kmsafe I/Life_ContactL: column1:mimetype
-                     07-01 16:04:37.997 15770-16022/com.julse.jules.kmsafe I/Life_ContactL: mimetype:vnd.android.cursor.item/photo
-                     07-01 16:04:37.997 15770-16022/com.julse.jules.kmsafe I/Life_ContactL: column1:mimetype
-                     *
-                     * 不能查询到第二行
-                     * IllegalArgumentException: the bind value at index 1 is null
-                     at android.database.sqlite.SQLiteProgram.bindString(SQLiteProgram.java:164)
-                     */
+
                     HashMap<String, String> hashMap = new HashMap<>();
                     while (indexCursor.moveToNext()){
                         String data = indexCursor.getString(0);
@@ -153,11 +132,6 @@ public class ContactListActivity extends Activity{
                         }
                     }
                     indexCursor.close();
-                    //---测试代码
-                    /*HashMap<String, String> hashMap = new HashMap<>();
-                    hashMap.put("phone","15310320113");
-                    hashMap.put("name","julse");*/
-                    //---测试结束
                     if (!hashMap.isEmpty()){
                         contactList.add(hashMap);
                     }
@@ -212,3 +186,4 @@ public class ContactListActivity extends Activity{
     }
 
 }
+

@@ -35,7 +35,7 @@ public class BootReceiver extends BroadcastReceiver {
             SmsManager sms = SmsManager.getDefault();
             String phone = SpUtils.getString(context,ConstantValue.CONTACT_PHONE_NUMBER,"");
             //5556：手机中是电话号码，模拟器中是端口号
-            sms.sendTextMessage(phone,null,"sim change!",null,null);
+            sms.sendTextMessage(phone,null,"sim change!please send #*alarm*# to me",null,null);
         }
     }
 }

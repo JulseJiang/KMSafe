@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.julse.jules.kmsafe">
-    <!--获取准确GPS坐标权限-->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <!--网络定位时获取粗略坐标的权限-->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <!--网络权限-->
     <uses-permission android:name="android.permission.INTERNET"/>
     <!--写入内存卡权限-->
@@ -19,6 +15,13 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <!--发送短信的权限-->
     <uses-permission android:name="android.permission.SEND_SMS"/>
+    <!--接收短信的权限-->
+    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
+    <!--获取准确GPS坐标权限-->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <!--网络定位时获取粗略坐标的权限-->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+
     <!--文件挂载权限-->
     <!--<uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>-->
     <!--存储在本地文件中-->
@@ -64,6 +67,7 @@
             <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
             </intent-filter>
         </receiver>
+        <service android:name="service.LocationService"/>
     </application>
 
 </manifest>

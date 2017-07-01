@@ -3,6 +3,7 @@ package activity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -91,6 +92,11 @@ public class HomeActivity extends Activity{
                         //开启防盗功能
                         Log.i(TAG,"开启防盗功能");
                         showDialog();
+                        break;
+                    case 1:
+                        Log.i(TAG,"播放音乐");
+                        Intent intent1 = new Intent(getApplicationContext(),TestActivity.class);
+                        startActivity(intent1);
                         break;
                     case 8://getApplicationContext当前上下文环境所对应的类
                         Intent intent = new Intent(getApplicationContext(), SettingActivity.class);

@@ -18,7 +18,7 @@ public class TestActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        TextView textView = new TextView(this);
+        final TextView textView = new TextView(this);
         textView.setText("测试类");
         setContentView(textView);
         //获取经纬度坐标：（LocationManager）
@@ -41,11 +41,19 @@ public class TestActivity extends Activity {
                     @Override
                     public void onLocationChanged(Location location) {
                        //位置变化
+                        //经度
+                        double longitude = location.getLongitude();
+                        //纬度
+                        double latitude = location.getLatitude();
+                        textView.setText("经度：" +longitude+"  "+
+                                "纬度："+latitude);
+
                     }
 
                     @Override
                     public void onStatusChanged(String s, int i, Bundle bundle) {
                         //GPS状态发生切换的事件监听
+
                     }
 
                     @Override
