@@ -34,6 +34,7 @@ import java.util.List;
 public class ContactListActivity extends Activity{
     private ListView lv_contact;
     private List<HashMap<String,String>> contactList = new ArrayList<>();
+    private List<HashMap<String,String>> moreContextList = new ArrayList<>();
     private final String TAG="Life_ContactL";
     private MyAdapter mAdapter;
     private ProgressBar progressbar;
@@ -43,8 +44,13 @@ public class ContactListActivity extends Activity{
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             root_layout.removeView(progressbar);
-            mAdapter = new MyAdapter();
-            lv_contact.setAdapter(mAdapter);
+            if (mAdapter==null){
+                mAdapter = new MyAdapter();
+                lv_contact.setAdapter(mAdapter);
+            }else {
+                Log.i(TAG,"通知集合内容改变");
+                mAdapter.notifyDataSetChanged();
+            }
         }
     };
     @Override
@@ -133,29 +139,28 @@ public class ContactListActivity extends Activity{
                     }
                     indexCursor.close();
                     if (!hashMap.isEmpty()){
-                        contactList.add(hashMap);
+                        moreContextList.add(hashMap);
                     }
                     Log.i(TAG,"循环一次查询");
+                    if (i%20==0){
+                        contactList.addAll(moreContextList);
+                        //优化listview：每查询到20条消息发送一次状态码
+                        mhandler.sendEmptyMessage(0);
+                    }
+                    Log.i(TAG,"共查到i个联系人：i="+i);
                 }
 
-                Log.i(TAG,"共查到i个联系人：i="+i);
+
                 cursor.close();
                 //通过消息机制回到主线程处理逻辑,
                 // 发送一个空的消息，用状态码告诉主线程集合准备完毕，可以填充数据适配器了
+                //优化listview：每查询到20条消息发送一次状态码
                 mhandler.sendEmptyMessage(0);
             }
 
         }.start();
 
     }
-
-/*    *//**
-     * 关闭加载对话框
-     *//*
-    private void closeProgressDialog(){
-        Log.i(TAG,"关闭进度对话框");
-        root_layout.removeView(progressbar);
-    }*/
 
     private class MyAdapter extends BaseAdapter{
 
