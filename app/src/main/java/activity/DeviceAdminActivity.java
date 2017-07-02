@@ -40,6 +40,7 @@ public class DeviceAdminActivity extends Activity{
         //组件对象可以作为是否激活的判断标志，参数为：上下文环境，广播接收者对应的字节码文件
         mDeviceAdminSample = new ComponentName(this, DeviceAdmin.class);
         mDPM= (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
+        //安装软件后可以在设备管理器中手动激活，此按钮可省
         bt_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

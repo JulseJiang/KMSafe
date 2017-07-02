@@ -101,6 +101,7 @@ public class ContactListActivity extends Activity{
 
                 );
                 contactList.clear();
+                moreContextList.clear();
                 //循环游标，直到没有数据为止
                 int i =0;
                 while (cursor.moveToNext()){
@@ -142,19 +143,21 @@ public class ContactListActivity extends Activity{
                         moreContextList.add(hashMap);
                     }
                     Log.i(TAG,"循环一次查询");
-                    if (i%20==0){
+                    if (i%15==0){
                         contactList.addAll(moreContextList);
-                        //优化listview：每查询到20条消息发送一次状态码
+                        //优化listview：每查询到15条消息发送一次状态码
+                        moreContextList.clear();//每次添加之后要清空
                         mhandler.sendEmptyMessage(0);
                     }
-                    Log.i(TAG,"共查到i个联系人：i="+i);
+
                 }
 
-
+                Log.i(TAG,"共查到i个联系人：i="+i);
+                Log.i(TAG,"共查到i个联系人：contactList.size="+contactList.size());
                 cursor.close();
                 //通过消息机制回到主线程处理逻辑,
                 // 发送一个空的消息，用状态码告诉主线程集合准备完毕，可以填充数据适配器了
-                //优化listview：每查询到20条消息发送一次状态码
+
                 mhandler.sendEmptyMessage(0);
             }
 

@@ -133,4 +133,22 @@ public class BlackNumberDao {
         db.close();
         return  count;
     }
+
+    /**
+     * 查询对应电话的模式
+     * @param phone 电话
+     * @return 拦截类型：1，电话 2，短信 3，电话和短信 0,没有此条数据，或者异常
+     */
+    public int getMode(String phone){
+        SQLiteDatabase db = blackNumberOpenHelper.getWritableDatabase();
+        Cursor cursor = db.query(TABLE,new String[]{MODE},
+                PHONE+"=?",new String[]{phone},null,null,null);
+        int mode = 0;
+        if (cursor.moveToNext()){
+            mode = cursor.getInt(0);
+        }
+        cursor.close();
+        db.close();
+        return  mode;
+    }
 }

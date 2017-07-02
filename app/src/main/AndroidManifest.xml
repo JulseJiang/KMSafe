@@ -61,6 +61,7 @@
         <activity android:name="activity.ContactListActivity"/>
         <activity android:name="activity.DeviceAdminActivity"/>
         <activity android:name="activity.BlackNumberActivity"/>
+        <activity android:name="activity.AToolActivity"/>
         <receiver android:name="receiver.BootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
@@ -86,6 +87,7 @@
         </receiver>
         <service android:name="service.LocationService"/><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
      App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
+        <service android:name="service.BlackNumberService"/>
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />

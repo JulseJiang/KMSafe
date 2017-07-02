@@ -59,4 +59,29 @@
         <item name="android:background">@drawable/button_cancel</item>
 
     </style>
+
+    <style name="RowTextStyle">
+        <!-- Customize your theme here. -->
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:textColor">#000</item>
+        <item name="android:background">@drawable/selector_resetup_bg</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:paddingLeft">3dp</item>
+        <item name="android:layout_marginBottom">2dp</item>
+
+    </style>
+ <!--   <View
+        android:background="@color/colorPrimaryDark"
+        android:layout_height="1dp"
+        android:layout_margin="5dp"/>-->
+    <style name="lineStyle">
+        <!-- Customize your theme here. -->
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">@color/colorPrimaryDark</item>
+        <item name="android:layout_margin">5dp</item>
+
+    </style>
 </resources>

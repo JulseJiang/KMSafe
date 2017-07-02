@@ -1,6 +1,7 @@
 package activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -9,6 +10,8 @@ import com.julse.jules.kmsafe.R;
 
 import java.util.Set;
 
+import service.BlackNumberService;
+import util.ServiceUtil;
 import view.SettingItemView;
 import util.ConstantValue;
 import util.SpUtils;
@@ -26,8 +29,31 @@ public class SettingActivity extends Activity {
         Log.i(TAG,".........SettingActivity........");
         initUpdate();
         initPhoneLocalState();
+        initBlackNumber();
     }
 
+    /**
+     * 黑名单是否开启
+     */
+    private void initBlackNumber() {
+        final SettingItemView siv_blacknumber =findViewById(R.id.siv_blacknumber);
+        boolean isRunning = ServiceUtil.isRunning(this,"service.BlackNumberService");
+        siv_blacknumber.setCheck(isRunning);
+        Log.i(TAG,"--黑名单拦截是否开启："+isRunning);
+        siv_blacknumber.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //切换选中状态
+                boolean isCheck = siv_blacknumber.isCheck();
+                siv_blacknumber.setCheck(!isCheck);
+                if (!isCheck){
+                    startService(new Intent(getApplicationContext(),BlackNumberService.class));
+                }else {
+                    stopService(new Intent(getApplicationContext(),BlackNumberService.class));
+                }
+            }
+        });
+    }
     /**
      * 手机归属地
      */

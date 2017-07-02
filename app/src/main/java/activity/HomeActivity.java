@@ -107,6 +107,9 @@ public class HomeActivity extends Activity{
                         Intent intent3 = new Intent(getApplicationContext(),TestActivity.class);
                         startActivity(intent3);
                         break;
+                    case 7:
+                        startActivity(new Intent(getApplicationContext(),AToolActivity.class));
+                        break;
                     case 8://getApplicationContext当前上下文环境所对应的类
                         Intent intent = new Intent(getApplicationContext(), SettingActivity.class);
                         startActivity(intent);
