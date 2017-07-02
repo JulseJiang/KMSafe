@@ -99,9 +99,13 @@ public class HomeActivity extends Activity{
                         startActivity(intent1);
                         break;
                     case 2:
-                        Log.i(TAG,"激活设备管理器");
+                        Log.i(TAG,"激活设备管理器");//此模块存在问题，不能成功激活，但是实现了卸载功能
                         Intent intent2 = new Intent(getApplicationContext(),DeviceAdminActivity.class);
                         startActivity(intent2);
+                        break;
+                    case 3:
+                        Intent intent3 = new Intent(getApplicationContext(),TestActivity.class);
+                        startActivity(intent3);
                         break;
                     case 8://getApplicationContext当前上下文环境所对应的类
                         Intent intent = new Intent(getApplicationContext(), SettingActivity.class);

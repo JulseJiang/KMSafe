@@ -4,6 +4,10 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.nfc.Tag;
+import android.util.Log;
+
+import com.lidroid.xutils.db.annotation.Table;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,7 +83,7 @@ public class BlackNumberDao {
     /**
      * 查询所有信息
      */
-    public void findAll(){
+    public List<BlackNumberInfo> findAll(){
         SQLiteDatabase db = blackNumberOpenHelper.getWritableDatabase();
         Cursor cursor = db.query(TABLE,
                 new String[]{PHONE, MODE},
@@ -93,5 +97,24 @@ public class BlackNumberDao {
         }
         cursor.close();
         db.close();
+        Log.i("Life","数据库信息条数"+blackNumberList.size());
+        return blackNumberList;
+    }
+    public void find(int index){
+        SQLiteDatabase db = blackNumberOpenHelper.getWritableDatabase();
+        String SQL = "select * from " + TABLE+
+                " order by _id desc LIMIT ?,20;";
+        Cursor cursor = db.rawQuery(SQL,new String[]{index+""});//从index开始查询，查20条
+        List<BlackNumberInfo> blackNumberList= new ArrayList<>();
+        while(cursor.moveToNext()){
+            BlackNumberInfo blackNumberInfo = new BlackNumberInfo();
+            blackNumberInfo.phone=cursor.getString(0);
+            blackNumberInfo.mode=cursor.getString(1);
+            blackNumberList.add(blackNumberInfo);
+        }
+        cursor.close();
+        db.close();
+        Log.i("Life","数据库信息条数"+blackNumberList.size());
+
     }
 }
