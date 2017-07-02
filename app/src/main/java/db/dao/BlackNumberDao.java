@@ -100,7 +100,7 @@ public class BlackNumberDao {
         Log.i("Life","数据库信息条数"+blackNumberList.size());
         return blackNumberList;
     }
-    public void find(int index){
+    public List<BlackNumberInfo> find(int index){
         SQLiteDatabase db = blackNumberOpenHelper.getWritableDatabase();
         String SQL = "select * from " + TABLE+
                 " order by _id desc LIMIT ?,20;";
@@ -108,13 +108,29 @@ public class BlackNumberDao {
         List<BlackNumberInfo> blackNumberList= new ArrayList<>();
         while(cursor.moveToNext()){
             BlackNumberInfo blackNumberInfo = new BlackNumberInfo();
-            blackNumberInfo.phone=cursor.getString(0);
-            blackNumberInfo.mode=cursor.getString(1);
+            blackNumberInfo.phone=cursor.getString(1);
+            blackNumberInfo.mode=cursor.getString(2);
             blackNumberList.add(blackNumberInfo);
         }
         cursor.close();
         db.close();
         Log.i("Life","数据库信息条数"+blackNumberList.size());
+        return blackNumberList;
+    }
 
+    /**
+     * 获取条目总数
+     * @return 返回0表示0条消息或异常
+     */
+    public int getCount(){
+        SQLiteDatabase db = blackNumberOpenHelper.getWritableDatabase();
+        Cursor cursor = db.rawQuery("select count(*) from blacknumber;",null);
+        int count = 0;
+        if (cursor.moveToNext()){
+            count = cursor.getInt(0);
+        }
+        cursor.close();
+        db.close();
+        return  count;
     }
 }

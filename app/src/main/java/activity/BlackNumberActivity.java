@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -35,14 +36,20 @@ public class BlackNumberActivity extends Activity{
     private List<BlackNumberInfo> mBlackNumberList;
     private int mode = 1;
     private Mydapter mAdapter;
-
+    private boolean mIsload=false;
+    private int mCount;
     private Handler mHandler= new Handler(){
 
         @Override
         public void handleMessage(Message msg) {
             //告诉listview可以设置数据适配器了
-            mAdapter = new Mydapter();
-            lv_blacknumber.setAdapter(mAdapter);
+            if (mAdapter==null){
+                mAdapter = new Mydapter();
+                lv_blacknumber.setAdapter(mAdapter);
+            }else {
+                mAdapter.notifyDataSetChanged();
+            }
+
         }
     };
     @Override
@@ -63,13 +70,27 @@ public class BlackNumberActivity extends Activity{
                 //获取操作黑名单数据库的对象
                 mDao = BlackNumberDao.getInstance(getApplicationContext());
                 //获取数据库中黑名单信息
-                mBlackNumberList=mDao.findAll();
+                mBlackNumberList=mDao.find(0);
+                mCount=mDao.getCount();
                 //通过消息机制，告诉主线程可以使用包含数据的集合
-               Log.i("Life","mBlackNumberList大小："+mBlackNumberList.size());
+                Log.i("Life","mBlackNumberList大小："+mBlackNumberList.size());
                 mHandler.sendEmptyMessage(0);
             }
         }.start();
     }
+
+    /**
+     * 分页加载数据
+     */
+    private void loadData(int index) {
+        //获取操作黑名单数据库的对象
+    mDao = BlackNumberDao.getInstance(getApplicationContext());
+    //获取数据库中黑名单信息
+    mBlackNumberList=mDao.find(index);
+    //通过消息机制，告诉主线程可以使用包含数据的集合
+    Log.i("Life","mBlackNumberList大小："+mBlackNumberList.size());
+    mHandler.sendEmptyMessage(0);
+}
 
     private void initUI() {
         bt_add=findViewById(R.id.bt_add);
@@ -78,6 +99,48 @@ public class BlackNumberActivity extends Activity{
             @Override
             public void onClick(View view) {
                 showDialog();
+            }
+        });
+        lv_blacknumber.setOnScrollListener(new AbsListView.OnScrollListener() {
+            //滚动过程中，状态发生改变的调用方法
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int scrollState) {
+//                AbsListView.OnScrollListener.SCROLL_STATE_FLING;//飞速滚动
+//                AbsListView.OnScrollListener.SCROLL_STATE_IDLE;//空闲状态
+//                AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL//触摸时滚动
+                if (mBlackNumberList!=null){
+                    if (scrollState== AbsListView.OnScrollListener.SCROLL_STATE_IDLE//滚到停止状态
+                            &&lv_blacknumber.getLastVisiblePosition()>=mBlackNumberList.size()-1//从size是从1开始计数的，最后一个条目可见,触底的时候
+                            &&!mIsload){//防止重复加载
+                        /**
+                         * 如果当前正在加载mIsLoad就是true，本次加载完毕之后，再将mIsLoad改为false，再去加载
+                         *
+                         */
+                        if (mCount>mBlackNumberList.size()){
+                            //加载后面的条目
+                            new Thread(){
+                                @Override
+                                public void run() {
+                                    super.run();
+                                    //获取操作黑名单数据库的对象
+                                    mDao = BlackNumberDao.getInstance(getApplicationContext());
+                                    //获取数据库中黑名单信息
+                                    List<BlackNumberInfo> moreData=mDao.find(mBlackNumberList.size());
+                                    mBlackNumberList.addAll(moreData);
+                                    //通过消息机制，告诉主线程可以使用包含数据的集合
+                                    Log.i("Life","mBlackNumberList大小："+mBlackNumberList.size());
+                                    mHandler.sendEmptyMessage(0);
+                                }
+                            }.start();
+                        }
+
+                    }
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+
             }
         });
     }
@@ -151,7 +214,7 @@ public class BlackNumberActivity extends Activity{
                 holder.iv_delete =  view.findViewById(R.id.iv_delete);
                 view.setTag(holder);
             }else {
-                view.getTag();
+                holder= (ViewHolder) view.getTag();
             }
 
             holder.iv_delete.setOnClickListener(new View.OnClickListener() {

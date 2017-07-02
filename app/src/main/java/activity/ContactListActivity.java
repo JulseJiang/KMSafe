@@ -175,14 +175,26 @@ public class ContactListActivity extends Activity{
         }
 
         @Override
-        public View getView(int i, View convertView, ViewGroup viewGroup) {
-            View view = View.inflate(getApplicationContext(), R.layout.listview_contact_item, null);
-            TextView tv_name = view.findViewById(R.id.tv_name);
-            TextView tv_phone = view.findViewById(R.id.tv_phone);
-            tv_name.setText(getItem(i).get("name"));
-            tv_phone.setText(getItem(i).get("phone"));
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            viewHolder holder=null;
+            if (view==null){
+                holder = new viewHolder();
+                view = View.inflate(getApplicationContext(), R.layout.listview_contact_item, null);
+                holder.tv_name = view.findViewById(R.id.tv_name);
+                holder.tv_phone = view.findViewById(R.id.tv_phone);
+                view.setTag(holder);
+            }else {
+                holder= (viewHolder) view.getTag();
+            }
+            holder.tv_name.setText(getItem(i).get("name"));
+            holder.tv_phone.setText(getItem(i).get("phone"));
             return view;
         }
+
+    }
+    static class viewHolder{
+        TextView tv_name;
+        TextView tv_phone;
     }
 
 }
