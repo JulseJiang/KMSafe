@@ -56,6 +56,7 @@
         <activity android:name="activity.Setup4Activity"/>
         <activity android:name="activity.ContactListActivity"/>
         <activity android:name="activity.DeviceAdminActivity"/>
+        <activity android:name="activity.BlackNumberActivity"/>
         <receiver android:name="receiver.BootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>

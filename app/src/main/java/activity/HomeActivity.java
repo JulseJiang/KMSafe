@@ -70,7 +70,7 @@ public class HomeActivity extends Activity{
         mTitleStr = new String[]{
                 "手机防盗","通讯卫士","软件管理",
                 "进程管理","流量统计","手机杀毒",
-                "缓存清理","手机防盗","设置中心",
+                "缓存清理","高级工具","设置中心",
 
         };
 
@@ -94,8 +94,8 @@ public class HomeActivity extends Activity{
                         showDialog();
                         break;
                     case 1:
-                        Log.i(TAG,"定位");
-                        Intent intent1 = new Intent(getApplicationContext(),TestActivity.class);
+                        Log.i(TAG,"跳转到通讯卫士模块");
+                        Intent intent1 = new Intent(getApplicationContext(),BlackNumberActivity.class);
                         startActivity(intent1);
                         break;
                     case 2:
