@@ -1,7 +1,10 @@
 package util;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+
+import activity.SettingActivity;
 
 /**
  * Created by jules on 2017/6/29.
@@ -82,6 +85,36 @@ public class SpUtils {
             sp = ctx.getSharedPreferences("config", Context.MODE_PRIVATE);
         }
         sp.edit().remove(key).commit();
+    }
+
+    /**
+     *
+     * @param ctx
+     * @param key
+     * @param defValue
+     * @return
+     */
+    public static int getInt(Context ctx, String key, int defValue) {
+        //存储节点文件的名称，读写方式
+        if (sp==null){
+            sp = ctx.getSharedPreferences("config", Context.MODE_PRIVATE);
+        }
+        return sp.getInt(key,defValue);
+
+    }
+
+    /**
+     * 存储int型的节点
+     * @param ctx
+     * @param key
+     * @param value
+     */
+    public static void putInt(Context ctx, String key, int value) {
+        //存储节点文件的名称，读写方式
+        if (sp==null){
+            sp = ctx.getSharedPreferences("config", Context.MODE_PRIVATE);
+        }
+        sp.edit().putInt(key,value).commit();
     }
 }
 

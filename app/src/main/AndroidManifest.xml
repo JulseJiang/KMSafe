@@ -25,6 +25,8 @@
     <uses-permission android:name="android.permission.VIBRATE"/>
     <!--读取通话状态-->
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <!--在系统窗体上挂载view的权限-->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <!--测试类 无效-->
     <!--<instrumentation
         android:name="android.test.InstrumentationTestRunner"

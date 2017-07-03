@@ -1,8 +1,10 @@
 package activity;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 
@@ -12,6 +14,7 @@ import service.BlackNumberService;
 import service.AddressService;
 import util.ServiceUtil;
 import util.ToastUtil;
+import view.SettingItemClickView;
 import view.SettingItemView;
 import util.ConstantValue;
 import util.SpUtils;
@@ -22,6 +25,9 @@ import util.SpUtils;
 
 public class SettingActivity extends Activity {
     private final String TAG= "Life_SettingActivity";
+    private int mToastStyle;
+    private String[] mToastStyleDes;
+    private SettingItemClickView siv_toast_style;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,7 +35,62 @@ public class SettingActivity extends Activity {
         Log.i(TAG,".........SettingActivity........");
         initUpdate();
         initAdress();
+        initToastStyle();
         initBlackNumber();
+    }
+
+    /**
+     * 吐司样式自定义
+     */
+    private void initToastStyle() {
+        siv_toast_style = findViewById(R.id.siv_toast_style);
+        //话述（产品经理会提供）
+        siv_toast_style.setTitle("设置归属地显示风格");
+        //创建描述文字所在的string类型数组
+        mToastStyleDes = new String[]{"白色","橙色","蓝色","紫色","绿色"};
+        //sp获取吐司显示的风格索引值，用于获取描述内容控件
+        mToastStyle = SpUtils.getInt(this, ConstantValue.TOAST_STYLE,0);
+        //通过索引，获取字符串数组的文字
+        siv_toast_style.setDes(mToastStyleDes[this.mToastStyle]);
+        //监听点击事件，弹出对话框
+        siv_toast_style.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showToastStyleDialog();
+            }
+        });
+    }
+
+    /**
+     * 显示吐司样式的对话框
+     */
+    private void showToastStyleDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setIcon(R.drawable.ic_earth);
+        builder.setTitle("选择昵称样式");
+        /**
+         * 参数1：String 类型描述颜色的文字数组，
+         * 参数2：弹出对话框时选中条目索引值
+         * 参数3：触发事件：记录选中的索引值，关闭对话框
+         */
+        builder.setSingleChoiceItems(mToastStyleDes, mToastStyle, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int i) {
+                //记录选中的索引值，关闭对话框，显示选中色值文字
+                SpUtils.putInt(getApplication(),ConstantValue.TOAST_STYLE,i);
+                dialog.dismiss();
+                siv_toast_style.setDes(mToastStyleDes[i]);
+                ToastUtil.showStyleToast(getApplication(),"开心就好");
+            }
+        });
+        //取消按钮
+        builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int i) {
+                dialog.dismiss();
+            }
+        });
+        builder.create().show();
     }
 
     /**
@@ -59,7 +120,7 @@ public class SettingActivity extends Activity {
      */
     private void initAdress() {
         final SettingItemView siv_local_phone = findViewById(R.id.siv_address);
-        boolean isRunning = ServiceUtil.isRunning(this, "com.julse.jules.kmsafe.service.AddressService");
+        boolean isRunning = ServiceUtil.isRunning(this, " service.AddressService");
         Log.i(TAG,"--手机归属地是否开启："+isRunning);
         siv_local_phone.setCheck(isRunning);
         siv_local_phone.setOnClickListener(new View.OnClickListener() {

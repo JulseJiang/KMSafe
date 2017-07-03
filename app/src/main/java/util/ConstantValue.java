@@ -30,6 +30,10 @@ public class ConstantValue {
      */
     public static final String CONTACT_PHONE_NUMBER = "contact_phone_number";
     /**
+     * toast样式
+     */
+    public static final String TOAST_STYLE = "toast_style";
+    /**
      * 是否开启防盗保护
      */
     public static String OPEN_SECURITY ="open_security";

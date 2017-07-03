@@ -3,11 +3,19 @@ package service;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.PixelFormat;
 import android.os.IBinder;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.View;
+import android.view.WindowManager;
 import android.widget.Toast;
+
+import com.julse.jules.kmsafe.R;
+
+import util.ToastUtil;
 
 /**
  * Created by jules on 2017/7/3.
@@ -15,7 +23,7 @@ import android.widget.Toast;
 public class AddressService extends Service{
     private final String TAG = "Life_AddressService";
     private TelephonyManager mTM;
-    private MyPhoneStateListener myPhoneStateListener;
+    private AddressService.MyPhoneStateListener myPhoneStateListener;
     @Override
     public void onCreate() {
         //第一次开启服务以后需要管理吐司的显示
@@ -49,7 +57,7 @@ public class AddressService extends Service{
     /**
      * 添加触发方式
      */
-    private class MyPhoneStateListener extends PhoneStateListener{
+    public class MyPhoneStateListener extends PhoneStateListener{
 //        手动重写电话状态发生改变会触发的方法
 
         @Override
@@ -58,22 +66,23 @@ public class AddressService extends Service{
                 //空闲状态，没有任何活动
                 case TelephonyManager.CALL_STATE_IDLE:
                     Log.i(TAG,"没有活动，空闲了--------------");
+                    //挂断电话时候移除吐司
+                    ToastUtil.closeStyleToast();
                     break;
                 //摘机状态，至少一个电话活动
                 case TelephonyManager.CALL_STATE_OFFHOOK:
                     Log.i(TAG,"拨打或者通话中--------------");
+                    ToastUtil.showStyleToast(getApplication(),incomingNumber);
                     break;
                 //响铃状态（展示吐司）
                 case TelephonyManager.CALL_STATE_RINGING:
                     Log.i(TAG,"响铃了--------------");
-                    showToast(incomingNumber);
+                    ToastUtil.showStyleToast(getApplication(),incomingNumber);
                     break;
             }
             super.onCallStateChanged(state, incomingNumber);
         }
     }
 
-    private void showToast(String incomingNumber) {
-        Toast.makeText(getApplicationContext(),incomingNumber,Toast.LENGTH_LONG).show();
-    }
+
 }
