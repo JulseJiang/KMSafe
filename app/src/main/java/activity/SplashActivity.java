@@ -1,11 +1,14 @@
 package activity;
 
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.nfc.Tag;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
@@ -26,10 +29,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 
 import util.ConstantValue;
@@ -155,26 +162,20 @@ public class SplashActivity extends AppCompatActivity {
      */
     private void downloadApk() {
         //apk先下载的连接地址downloadUrl，放置apk所在的路径
-        //1.判断sdk是否可以
+        //1.判断sdk是否可以,如果不能使用，就存在手机文件系统中
 
         String path;
-       /* if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
+        if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
             //2.获取sdk路径
             path = Environment.getExternalStorageDirectory().getAbsolutePath() +
                     File.separator + "KMSafe20.apk";
-        }else {*/
-//            File apkfile = new File("KMSafe21.apk");
-            File apkfile = getDir("KMSafe21.apk", Context.MODE_ENABLE_WRITE_AHEAD_LOGGING);
-            path=apkfile.getAbsolutePath();
-//        }
-        Log.i(TAG,"path:"+path);
-//        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
 
+        Log.i(TAG,"找到了sdk的path:"+path);
             //3.发出请求，获取apk，并且放到指定路径
             HttpUtils httpUtils = new HttpUtils();
             //4.发送请求，传递参数（下载地址，应用放置地址）
-        mDownloadUrl="http://119.29.62.167/KMSafe/version.json";
-                httpUtils.download(mDownloadUrl, path, new RequestCallBack<File>() {
+            mDownloadUrl="http://119.29.62.167/KMSafe/version.json";
+            httpUtils.download(mDownloadUrl, path, new RequestCallBack<File>() {
                 @Override
                 public void onSuccess(ResponseInfo<File> responseInfo) {
                     //下载成功（下载成功放在sdk卡中的apk）
@@ -199,8 +200,17 @@ public class SplashActivity extends AppCompatActivity {
                     Log.i(TAG,"正在下载");
                 }
                 });
+        }else{
+            //        }else {
+//            File apkfile = new File("KMSafe23.apk");
+//            apkfile.setWritable(true);
+//            File apkfile = getDir("KMSafe21.apk", Context.MODE_ENABLE_WRITE_AHEAD_LOGGING);
+//                FileOutputStream fos = new FileOutputStream("KMSafe21.apk","");
+//            path=apkfile.getAbsolutePath();
+//        }
+            WriteFile();
         }
-//    }
+    }
 
     /**
      * 安装下载的apk
@@ -392,4 +402,47 @@ public class SplashActivity extends AppCompatActivity {
         }
         return null;
     }
+
+    /**
+     * 文件存储下载的apk
+     */
+    private void WriteFile(){
+        new Thread(){
+            @Override
+            public void run() {
+                super.run();
+                URL httpUrl= null;
+                try {
+                    mDownloadUrl="http://119.29.62.167/KMSafe/version.json";
+                    httpUrl = new URL(mDownloadUrl);
+                    HttpURLConnection conn=(HttpURLConnection) httpUrl.openConnection();
+                    conn.setReadTimeout(5000);
+                    conn.setRequestMethod("GET");
+                    File apkfile = new File("KMSafe21.apk");
+                    apkfile.setWritable(true);
+                    Log.i(TAG,"path:"+apkfile.getAbsolutePath());
+                    FileOutputStream fos = new FileOutputStream("KMSafe21.apk",true);
+                    InputStream is = conn.getInputStream();
+                    byte[] buffer = new byte[1024];
+                    int len = 0;
+                    while ((len=is.read(buffer))!=-1){
+                        fos.write(buffer,0,len);
+                    }
+                    is.close();
+                    fos.close();
+                    Log.i(TAG,"文件方式下载成功");
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (ProtocolException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }.start();
+    }
+
 }

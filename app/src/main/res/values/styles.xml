@@ -70,12 +70,13 @@
         <item name="android:textSize">18sp</item>
         <item name="android:paddingLeft">3dp</item>
         <item name="android:layout_marginBottom">2dp</item>
-
+     <!--抽取有问题
+        <View
+            android:background="@color/colorPrimaryDark"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_margin="5dp"/>-->
     </style>
- <!--   <View
-        android:background="@color/colorPrimaryDark"
-        android:layout_height="1dp"
-        android:layout_margin="5dp"/>-->
     <style name="lineStyle">
         <!-- Customize your theme here. -->
         <item name="android:layout_width">match_parent</item>

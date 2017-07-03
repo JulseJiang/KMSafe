@@ -109,6 +109,7 @@ public class HomeActivity extends Activity{
                         break;
                     case 7:
                         startActivity(new Intent(getApplicationContext(),AToolActivity.class));
+                        Log.i(TAG,"打开高级工具");
                         break;
                     case 8://getApplicationContext当前上下文环境所对应的类
                         Intent intent = new Intent(getApplicationContext(), SettingActivity.class);

@@ -9,19 +9,6 @@
         style="@style/TitleStyle"/>
     <!--跑马灯-->
     <!--自定义控件达到滚动效果-->
-    <!--<TextView
-        android:text="Discover interesting projects and people to populate your personal news feed.Your news feed helps you keep up with recent activity on repositories you watch and people you follow."
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="#000"
-        android:lines="1"
-        android:padding="5dp"
-        android:ellipsize="marquee"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:marqueeRepeatLimit="marquee_forever"
-
-        />-->
     <view.FocusTextView
         android:text="Discover interesting projects and people to populate your personal news feed.Your news ."
         android:layout_width="match_parent"

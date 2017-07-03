@@ -1,25 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
     <TextView
        style="@style/TitleStyle"
         android:text="高级工具"/>
     <TextView
        style="@style/RowTextStyle"
         android:text="归属地查询"/>
-    <view style="@style/lineStyle"/>
+    <!--<view style="@style/lineStyle"/>-->
+    <View
+        android:background="@color/colorPrimaryDark"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="5dp"/>
     <TextView
         style="@style/RowTextStyle"
         android:text="短信备份"/>
-    <view style="@style/lineStyle"/>
+    <!--<view style="@style/lineStyle"/>-->
+    <View
+        android:background="@color/colorPrimaryDark"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="5dp"/>
     <TextView
         style="@style/RowTextStyle"
         android:text="常用号码查询"/>
-    <view style="@style/lineStyle"/>
+    <!--<view style="@style/lineStyle"/>-->
+    <View
+        android:background="@color/colorPrimaryDark"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="5dp"/>
     <TextView
         style="@style/RowTextStyle"
         android:text="程序锁"/>
-    <view style="@style/lineStyle"/>
+    <!--<view style="@style/lineStyle"/>-->
+    <View
+        android:background="@color/colorPrimaryDark"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="5dp"/>
 
 </LinearLayout>
