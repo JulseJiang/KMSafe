@@ -68,6 +68,7 @@
             style="@style/preBtnStyle"
             />
         <Button
+            android:text="完成"
             android:id="@+id/next_btn"
             style="@style/nextBtnStyle" />
     </RelativeLayout>

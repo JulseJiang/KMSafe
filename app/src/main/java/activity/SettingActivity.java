@@ -8,10 +8,10 @@ import android.view.View;
 
 import com.julse.jules.kmsafe.R;
 
-import java.util.Set;
-
 import service.BlackNumberService;
+import service.AddressService;
 import util.ServiceUtil;
+import util.ToastUtil;
 import view.SettingItemView;
 import util.ConstantValue;
 import util.SpUtils;
@@ -28,7 +28,7 @@ public class SettingActivity extends Activity {
         setContentView(R.layout.activity_setting);
         Log.i(TAG,".........SettingActivity........");
         initUpdate();
-        initPhoneLocalState();
+        initAdress();
         initBlackNumber();
     }
 
@@ -55,19 +55,25 @@ public class SettingActivity extends Activity {
         });
     }
     /**
-     * 手机归属地
+     * 是否手机归属地
      */
-    private void initPhoneLocalState() {
-        final SettingItemView siv_local_phone = findViewById(R.id.siv_local_phone);
-        boolean open_local_phone = SpUtils.getBoolean(this, ConstantValue.OPEN_LOCAL_PHONE,false);
-        siv_local_phone.setCheck(open_local_phone);
-        Log.i(TAG,"--手机归属地是否开启："+open_local_phone);
+    private void initAdress() {
+        final SettingItemView siv_local_phone = findViewById(R.id.siv_address);
+        boolean isRunning = ServiceUtil.isRunning(this, "com.julse.jules.kmsafe.service.AddressService");
+        Log.i(TAG,"--手机归属地是否开启："+isRunning);
+        siv_local_phone.setCheck(isRunning);
         siv_local_phone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //切换选中状态
                 boolean isCheck = siv_local_phone.isCheck();
                 siv_local_phone.setCheck(!isCheck);
+                if (!isCheck){
+                    startService(new Intent(getApplicationContext(), AddressService.class));
+                    ToastUtil.show(getApplication(),"开启服务");
+                }else {
+                    stopService(new Intent(getApplicationContext(), AddressService.class));
+                }
                 //存储选中状态
                 SpUtils.putBoolean(getApplication(), ConstantValue.OPEN_LOCAL_PHONE,!isCheck);
             }

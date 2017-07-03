@@ -17,7 +17,7 @@
     </view.SettingItemView>
     <view.SettingItemView
         xmlns:kmsafe="http://schemas.android.com/apk/res/com.julse.jules.kmsafe"
-        android:id="@+id/siv_local_phone"
+        android:id="@+id/siv_address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         kmsafe:destitle = "电话归属地的显示设置"

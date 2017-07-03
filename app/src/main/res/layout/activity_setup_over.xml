@@ -25,7 +25,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </RelativeLayout>
-    <view style="@style/lineStyle"/>
+    <!--<view style="@style/lineStyle"/>-->
+    <View
+        android:background="@color/colorPrimaryDark"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="5dp"/>
     <RelativeLayout
         android:layout_margin="5dp"
         android:layout_width="match_parent"
@@ -48,12 +53,21 @@
             android:layout_height="wrap_content" />
 
     </RelativeLayout>
-    <view style="@style/lineStyle"/>
+    <View
+        android:background="@color/colorPrimaryDark"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="5dp"/>
     <TextView
         android:id="@+id/tv_reset_setup"
         android:text="重新进入设置向导"
        style="@style/RowTextStyle"/>
-    <view style="@style/lineStyle"/>
+    <!--<view style="@style/lineStyle"/>-->
+    <View
+        android:background="@color/colorPrimaryDark"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="5dp"/>
     <TextView
         android:text="功能展示"
         android:background="@drawable/bar"

@@ -1,8 +1,10 @@
 package activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -45,6 +47,12 @@ public class Setup3Activity extends BaseSetupActivity{
 
         }else {
             ToastUtil.show(this,"联系人号码不规范");
+//            开启震动
+            Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+//            设置震动毫秒
+            vibrator.vibrate(500);
+//            有规律地震动LOOP(震动时间，不震动时间，震动时间...)-1：重复，2，反复执行两次
+            vibrator.vibrate(new long[]{500,700,500,700},-1);
         }
     }
 
