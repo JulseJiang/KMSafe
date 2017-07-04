@@ -25,7 +25,7 @@ import util.SpUtils;
 
 public class SettingActivity extends Activity {
     private final String TAG= "Life_SettingActivity";
-    private ToastUtil toastUtil;
+//    private ToastUtil toastUtil;
     private int mToastStyle;
     private String[] mToastStyleDes;
     private SettingItemClickView siv_toast_style;
@@ -69,7 +69,7 @@ public class SettingActivity extends Activity {
         mToastStyle = SpUtils.getInt(this, ConstantValue.TOAST_STYLE,0);
         //通过索引，获取字符串数组的文字
         siv_toast_style.setDes(mToastStyleDes[this.mToastStyle]);
-        toastUtil=new ToastUtil(getApplication());
+//        toastUtil=new ToastUtil(getApplication());
         //监听点击事件，弹出对话框
         siv_toast_style.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,8 +98,8 @@ public class SettingActivity extends Activity {
                 SpUtils.putInt(getApplication(),ConstantValue.TOAST_STYLE,i);
                 dialog.dismiss();
                 siv_toast_style.setDes(mToastStyleDes[i]);
-                toastUtil.closeStyleToast();
-                toastUtil.showStyleToast(mToastStyleDes[i]);
+//                toastUtil.closeStyleToast();
+//                toastUtil.showStyleToast(mToastStyleDes[i]);
             }
         });
         //取消按钮
@@ -183,11 +183,11 @@ public class SettingActivity extends Activity {
 
 
 
-    @Override
+  /*  @Override
     protected void onPause() {
         super.onPause();
         if (toastUtil!=null){
             toastUtil.closeStyleToast();
         }
-    }
+    }*/
 }

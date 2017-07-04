@@ -16,6 +16,7 @@ import com.julse.jules.kmsafe.R;
 
 import util.ConstantValue;
 import util.SpUtils;
+import util.ToastUtil;
 
 /**
  * Created by jules on 2017/7/3.
@@ -43,12 +44,13 @@ public class ToastLocationActivity extends Activity{
         l_drag=findViewById(R.id.l_drag);
         bt_top = findViewById(R.id.bt_top);
         bt_bottom=findViewById(R.id.bt_bottom);
-
         mWM= (WindowManager) getSystemService(WINDOW_SERVICE);
         mScreenHeight = mWM.getDefaultDisplay().getHeight();
         mSreenWidth = mWM.getDefaultDisplay().getWidth();
         int locationX= SpUtils.getInt(this,ConstantValue.LOCATION_X,0);
         int locationY= SpUtils.getInt(this,ConstantValue.LOCATION_Y,0);
+        int index = SpUtils.getInt(this, ConstantValue.TOAST_STYLE, 0);
+        l_drag.setBackgroundResource(ToastUtil.mToastColor[index]);
 //        <!--包含图片的LinearLayout在相对布局中，所在位置规则需要相对布局提供-->
         layoutParams=new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.WRAP_CONTENT,
