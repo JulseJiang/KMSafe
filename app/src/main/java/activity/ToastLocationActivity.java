@@ -21,7 +21,6 @@ import util.SpUtils;
  * Created by jules on 2017/7/3.
  */
 public class ToastLocationActivity extends Activity{
-    private ImageView iv_icon;
     private Button bt_top,bt_bottom;
     private LinearLayout l_drag;
     private WindowManager mWM;
@@ -40,7 +39,7 @@ public class ToastLocationActivity extends Activity{
     }
 
     private void initUI() {
-        iv_icon = findViewById(R.id.iv_icon);
+
         l_drag=findViewById(R.id.l_drag);
         bt_top = findViewById(R.id.bt_top);
         bt_bottom=findViewById(R.id.bt_bottom);
@@ -123,7 +122,9 @@ public class ToastLocationActivity extends Activity{
                         break;
 
                 }
-                return true;//false:不响应事件
+                return true;//false:不响应事件，
+                // 或者既响应点击事件，又响应触摸事件Onclick（实质就是ACTION_UP事件）
+                //让OnClick返回true
             }
         });
     }

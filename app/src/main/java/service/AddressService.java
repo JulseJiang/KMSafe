@@ -18,6 +18,7 @@ import com.julse.jules.kmsafe.R;
 import util.ToastUtil;
 
 /**
+ * 归属地显示
  * Created by jules on 2017/7/3.
  */
 public class AddressService extends Service{

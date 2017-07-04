@@ -64,7 +64,7 @@ public class SettingActivity extends Activity {
         //话述（产品经理会提供）
         siv_toast_style.setTitle("设置归属地显示风格");
         //创建描述文字所在的string类型数组
-        mToastStyleDes = new String[]{"白色","黄色","橙色","紫色","蓝色"};
+        mToastStyleDes = new String[]{"透明","黄色","橙色","紫色","蓝色"};
         //sp获取吐司显示的风格索引值，用于获取描述内容控件
         mToastStyle = SpUtils.getInt(this, ConstantValue.TOAST_STYLE,0);
         //通过索引，获取字符串数组的文字

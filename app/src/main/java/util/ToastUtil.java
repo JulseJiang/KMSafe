@@ -5,6 +5,7 @@ import android.graphics.PixelFormat;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,9 +19,6 @@ import static android.content.Context.WINDOW_SERVICE;
 public class ToastUtil {
     private  WindowManager mWM;
     private Context ctx;
-    public ToastUtil(Context ctx){
-        this.ctx=ctx;
-    }
     private  int[] mToastColor=new int[]{R.color.colorWhite,R.color.colorYellow,R.color.colorOrange,
             R.color.colorAccent,R.color.colorBlue};
 //    private static int[] mIcon=new int[]{R.drawable.minman,R.drawable.white_52,
@@ -30,6 +28,9 @@ public class ToastUtil {
      */
     private static View mViewToast;
     private static WindowManager.LayoutParams mParams = new WindowManager.LayoutParams();
+    public ToastUtil(Context ctx){
+        this.ctx=ctx;
+    }
     /**
      * 维护Toast，防止忘记使用show方法
      * Created by jules on 2017/6/27.
@@ -56,11 +57,14 @@ public class ToastUtil {
         //吐司显示效果（解析布局文件）
         mViewToast = View.inflate(ctx, R.layout.toast_view,null);
         TextView tv_toast=mViewToast.findViewById(R.id.tv_toast);
+        LinearLayout l_drag = mViewToast.findViewById(R.id.l_drag);
         tv_toast.setText(msg);
         int index = SpUtils.getInt(ctx, ConstantValue.TOAST_STYLE, 0);
-//        设置颜色有问题
-        tv_toast.setTextColor(mToastColor[index]);
-//        tv_toast.setBackgroundResource(mIcon[index]);
+//        设置颜色有问题，始终是黑色
+//        tv_toast.setTextColor(mToastColor[index]);
+        if (index!=0){
+            l_drag.setBackgroundResource(mToastColor[index]);
+        }
         //在窗体上挂载一个view（需要权限）
         mWM.addView(mViewToast,mParams);
     }
