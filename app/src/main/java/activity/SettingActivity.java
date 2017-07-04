@@ -36,7 +36,23 @@ public class SettingActivity extends Activity {
         initUpdate();
         initAdress();
         initToastStyle();
+        initLocation();
         initBlackNumber();
+    }
+
+    /**
+     * 双击居中view所在屏幕的位置
+     */
+    private void initLocation() {
+        SettingItemClickView scv_location=findViewById(R.id.scv_location);
+        scv_location.setTitle("归属地提示框的位置");
+        scv_location.setDes("设置归属地提示框的位置");
+        scv_location.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(),ToastLocationActivity.class));
+            }
+        });
     }
 
     /**
@@ -47,7 +63,7 @@ public class SettingActivity extends Activity {
         //话述（产品经理会提供）
         siv_toast_style.setTitle("设置归属地显示风格");
         //创建描述文字所在的string类型数组
-        mToastStyleDes = new String[]{"白色","橙色","蓝色","紫色","绿色"};
+        mToastStyleDes = new String[]{"白色","黄色","橙色","紫色","蓝色"};
         //sp获取吐司显示的风格索引值，用于获取描述内容控件
         mToastStyle = SpUtils.getInt(this, ConstantValue.TOAST_STYLE,0);
         //通过索引，获取字符串数组的文字
@@ -80,7 +96,8 @@ public class SettingActivity extends Activity {
                 SpUtils.putInt(getApplication(),ConstantValue.TOAST_STYLE,i);
                 dialog.dismiss();
                 siv_toast_style.setDes(mToastStyleDes[i]);
-                ToastUtil.showStyleToast(getApplication(),"开心就好");
+                ToastUtil.closeStyleToast();
+                ToastUtil.showStyleToast(getApplication(),mToastStyleDes[i]);
             }
         });
         //取消按钮
@@ -162,4 +179,11 @@ public class SettingActivity extends Activity {
 
     }
 
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        ToastUtil.closeStyleToast();
+    }
 }

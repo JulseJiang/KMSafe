@@ -246,7 +246,7 @@ public class HomeActivity extends Activity{
         }
     }
     private void initUI() {
-        gv_home=(GridView) findViewById(R.id.gv_home);
+        gv_home=findViewById(R.id.gv_home);
         home_root=findViewById(R.id.home_root);
     }
 }

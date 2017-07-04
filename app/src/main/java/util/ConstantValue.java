@@ -34,6 +34,14 @@ public class ConstantValue {
      */
     public static final String TOAST_STYLE = "toast_style";
     /**
+     * 记录控件的位置x
+     */
+    public static final String LOCATION_X = "location_x";
+    /**
+     * 记录控件的位置y
+     */
+    public static final String LOCATION_Y = "location_y";
+    /**
      * 是否开启防盗保护
      */
     public static String OPEN_SECURITY ="open_security";

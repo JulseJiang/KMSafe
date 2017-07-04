@@ -72,12 +72,12 @@ public class AddressService extends Service{
                 //摘机状态，至少一个电话活动
                 case TelephonyManager.CALL_STATE_OFFHOOK:
                     Log.i(TAG,"拨打或者通话中--------------");
-                    ToastUtil.showStyleToast(getApplication(),incomingNumber);
+                    ToastUtil.showStyleToast(getApplication(),"illuminassion");
                     break;
                 //响铃状态（展示吐司）
                 case TelephonyManager.CALL_STATE_RINGING:
                     Log.i(TAG,"响铃了--------------");
-                    ToastUtil.showStyleToast(getApplication(),incomingNumber);
+                    ToastUtil.showStyleToast(getApplication(),"illuminassion");
                     break;
             }
             super.onCallStateChanged(state, incomingNumber);

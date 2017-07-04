@@ -68,6 +68,8 @@
         <activity android:name="activity.DeviceAdminActivity"/>
         <activity android:name="activity.BlackNumberActivity"/>
         <activity android:name="activity.AToolActivity"/>
+        <activity android:name="activity.ToastLocationActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
         <receiver android:name="receiver.BootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>

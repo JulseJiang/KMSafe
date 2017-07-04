@@ -17,6 +17,10 @@ import static android.content.Context.WINDOW_SERVICE;
 
 public class ToastUtil {
     private static WindowManager mWM;
+    private static int[] mToastColor=new int[]{R.color.colorWhite,R.color.colorYellow,R.color.colorOrange,
+            R.color.colorAccent,R.color.colorBlue};
+//    private static int[] mIcon=new int[]{R.drawable.minman,R.drawable.white_52,
+//    R.drawable.toast_bg,R.drawable.ic_earth,R.drawable.ic_phone,R.drawable.buttom_ok};
     /**
      * 弹出对话框的view布局
      */
@@ -47,13 +51,21 @@ public class ToastUtil {
         params.gravity = Gravity.LEFT+Gravity.TOP;
         //吐司显示效果（解析布局文件）
         mViewToast = View.inflate(ctx, R.layout.toast_view,null);
-//        TextView tv_toast=mViewToast.findViewById(R.layout.tv_toast);
+        TextView tv_toast=mViewToast.findViewById(R.id.tv_toast);
+        tv_toast.setText(msg);
+        int index = SpUtils.getInt(ctx, ConstantValue.TOAST_STYLE, 0);
+//        设置颜色有问题
+        tv_toast.setTextColor(mToastColor[index]);
+//        tv_toast.setBackgroundResource(mIcon[index]);
         //在窗体上挂载一个view（需要权限）
         mWM.addView(mViewToast,mParams);
     }
     public static void closeStyleToast(){
+
         if (mWM!=null&&mViewToast!=null){
             mWM.removeView(mViewToast);
+//            mWM.removeViewImmediate(mViewToast);
         }
     }
+
 }
