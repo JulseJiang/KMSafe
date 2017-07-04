@@ -73,7 +73,6 @@ public class ToastLocationActivity extends Activity{
                         startY= (int) event.getRawY();
                         break;
                     case MotionEvent.ACTION_MOVE:
-                        Log.i("Life","触发移动事件");
                         int moveX = (int) event.getRawX();
                         int moveY= (int) event.getRawY();
 

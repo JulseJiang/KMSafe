@@ -16,8 +16,12 @@ import static android.content.Context.WINDOW_SERVICE;
 
 
 public class ToastUtil {
-    private static WindowManager mWM;
-    private static int[] mToastColor=new int[]{R.color.colorWhite,R.color.colorYellow,R.color.colorOrange,
+    private  WindowManager mWM;
+    private Context ctx;
+    public ToastUtil(Context ctx){
+        this.ctx=ctx;
+    }
+    private  int[] mToastColor=new int[]{R.color.colorWhite,R.color.colorYellow,R.color.colorOrange,
             R.color.colorAccent,R.color.colorBlue};
 //    private static int[] mIcon=new int[]{R.drawable.minman,R.drawable.white_52,
 //    R.drawable.toast_bg,R.drawable.ic_earth,R.drawable.ic_phone,R.drawable.buttom_ok};
@@ -34,7 +38,7 @@ public class ToastUtil {
         Toast.makeText(ctx,msg,Toast.LENGTH_SHORT).show();
     }
 
-    public static void showStyleToast(Context ctx,String msg) {
+    public  void showStyleToast(String msg) {
         //获取窗体对象
         mWM = (WindowManager) ctx.getSystemService(WINDOW_SERVICE);
         final WindowManager.LayoutParams params = mParams;
@@ -60,7 +64,7 @@ public class ToastUtil {
         //在窗体上挂载一个view（需要权限）
         mWM.addView(mViewToast,mParams);
     }
-    public static void closeStyleToast(){
+    public  void closeStyleToast(){
 
         if (mWM!=null&&mViewToast!=null){
             mWM.removeView(mViewToast);

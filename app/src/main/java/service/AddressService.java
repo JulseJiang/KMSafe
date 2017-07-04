@@ -22,6 +22,7 @@ import util.ToastUtil;
  */
 public class AddressService extends Service{
     private final String TAG = "Life_AddressService";
+    private ToastUtil toastUtil;
     private TelephonyManager mTM;
     private AddressService.MyPhoneStateListener myPhoneStateListener;
     @Override
@@ -31,6 +32,7 @@ public class AddressService extends Service{
         //监听电话状态
         //--1，电话管理者对象
         mTM = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        toastUtil=new ToastUtil(getApplication());
         //--2,监听电话状态
         myPhoneStateListener = new MyPhoneStateListener();
         mTM.listen(myPhoneStateListener,PhoneStateListener.LISTEN_CALL_STATE);
@@ -67,17 +69,17 @@ public class AddressService extends Service{
                 case TelephonyManager.CALL_STATE_IDLE:
                     Log.i(TAG,"没有活动，空闲了--------------");
                     //挂断电话时候移除吐司
-                    ToastUtil.closeStyleToast();
+                    toastUtil.closeStyleToast();
                     break;
                 //摘机状态，至少一个电话活动
                 case TelephonyManager.CALL_STATE_OFFHOOK:
                     Log.i(TAG,"拨打或者通话中--------------");
-                    ToastUtil.showStyleToast(getApplication(),"illuminassion");
+                    toastUtil.showStyleToast("illuminassion");
                     break;
                 //响铃状态（展示吐司）
                 case TelephonyManager.CALL_STATE_RINGING:
                     Log.i(TAG,"响铃了--------------");
-                    ToastUtil.showStyleToast(getApplication(),"illuminassion");
+                    toastUtil.showStyleToast("illuminassion");
                     break;
             }
             super.onCallStateChanged(state, incomingNumber);
