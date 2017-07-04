@@ -7,23 +7,29 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.IBinder;
 import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 import android.telephony.SmsMessage;
 import android.util.Log;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 import db.dao.BlackNumberDao;
 import receiver.DeviceAdmin;
-import util.TelePhonyManager;
 
 /**
  * Created by jules on 2017/7/2.
  */
 
 public class BlackNumberService extends Service {
+    private String TAG="Life_BService";
     private BlackNumberDao mDao;
     private InnerSmsReceiver mInnerSmsReceiver;
-    private TelePhonyManager mTM;
+    private TelephonyManager mTM;
+    private MyPhoneStateListener myPhoneStateListener;
     @Override
     public IBinder onBind(Intent intent) {
         return null;
@@ -41,8 +47,10 @@ public class BlackNumberService extends Service {
         registerReceiver(mInnerSmsReceiver,intentFilter);
 
         //电话管理者对象
-//        mTM= (TelePhonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-
+        mTM = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        //--2,监听电话状态
+        myPhoneStateListener = new BlackNumberService.MyPhoneStateListener();
+        mTM.listen(myPhoneStateListener,PhoneStateListener.LISTEN_CALL_STATE);
         //监听电话状态
         super.onCreate();
     }
@@ -78,13 +86,68 @@ public class BlackNumberService extends Service {
             }
         }
     }
-    class MyPhoneStateListener extends PhoneStateListener{
+    /**
+     * 添加触发方式
+     */
+    public class MyPhoneStateListener extends PhoneStateListener{
+//        手动重写电话状态发生改变会触发的方法
+
         @Override
         public void onCallStateChanged(int state, String incomingNumber) {
-            super.onCallStateChanged(state, incomingNumber);
             switch (state){
-//                case TelephoneManager.Cal
+                //空闲状态，没有任何活动
+                case TelephonyManager.CALL_STATE_IDLE:
+                    Log.i(TAG,"没有活动，空闲了***************");
+                    //挂断电话时候移除吐司
+
+                    break;
+                //摘机状态，至少一个电话活动
+                case TelephonyManager.CALL_STATE_OFFHOOK:
+                    Log.i(TAG,"拨打或者通话中***************");
+
+                    break;
+                //响铃状态（展示吐司）
+                case TelephonyManager.CALL_STATE_RINGING:
+                    //idel文件中有挂断电话的api：endCall
+                    Log.i(TAG,"响铃了***************");
+                    endCall(incomingNumber);
+                    break;
             }
+            super.onCallStateChanged(state, incomingNumber);
         }
     }
+
+    private void endCall(String phone) {
+        int mode = mDao.getMode(phone);
+        if (mode==2||mode==3){
+            try {
+                //1.获取ServiceManager字节码文件
+                Class<?> clazz = Class.forName("android.os.ServiceManager");
+                //2.获取方法
+                Method method = clazz.getMethod("getService", String.class);
+                //3.反射调用此方法
+                IBinder iBinder = (IBinder) method.invoke(null, Context.TELECOM_SERVICE);
+                //4.调用获取aidl文件对象方法
+//                ITelephony iTelephony = ITelephony.Stub.asInterface(iBinder);
+                //5.调用在aidl中隐藏的endCall方法
+//                iTelephony.endCall();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+            //6.在内容解析器上注册内容观察者，通过内容观察者，观察数据库（Uri决定表和库）的变化
+//            getContentResolver().registerContentObserver(Uri.parse("content://call_log/calls",
+//                    new My));
+            //7..删除次被拦截的电话号码的通信记录（权限）
+            getContentResolver().delete(Uri.parse("content://call_log/calls"),
+                    "number=?",
+                    new String[]{phone});
+        }
+    }
+
 }

@@ -27,6 +27,12 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <!--在系统窗体上挂载view的权限-->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <!--挂断电话（拦截电话）需要的权限-->
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <!--读取通话记录-->
+    <uses-permission android:name="android.permission.READ_CALL_LOG"/>
+    <!--修改通话记录-->
+    <uses-permission android:name="android.permission.WRITE_CALL_LOG"/>
     <!--测试类 无效-->
     <!--<instrumentation
         android:name="android.test.InstrumentationTestRunner"
