@@ -2,6 +2,7 @@ package activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -24,6 +25,8 @@ public class ToastLocationActivity extends Activity{
     private Button bt_top,bt_bottom;
     private LinearLayout l_drag;
     private WindowManager mWM;
+    private RelativeLayout.LayoutParams layoutParams;
+    private long mHits[] = new long[2];
     /**
      * 屏幕可见宽高
      */
@@ -48,20 +51,14 @@ public class ToastLocationActivity extends Activity{
         int locationX= SpUtils.getInt(this,ConstantValue.LOCATION_X,0);
         int locationY= SpUtils.getInt(this,ConstantValue.LOCATION_Y,0);
 //        <!--包含图片的LinearLayout在相对布局中，所在位置规则需要相对布局提供-->
-        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
+        layoutParams=new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.WRAP_CONTENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT);
         layoutParams.leftMargin = locationX;
         layoutParams.topMargin = locationY;
         //将以上规则作用在l_drag上
         l_drag.setLayoutParams(layoutParams);
-        if (locationY>(mScreenHeight-22)/2){
-            bt_bottom.setVisibility(View.INVISIBLE);
-            bt_top.setVisibility(View.VISIBLE);
-        }else {
-            bt_bottom.setVisibility(View.VISIBLE);
-            bt_top.setVisibility(View.INVISIBLE);
-        }
+        placeBt(locationY);
         l_drag.setOnTouchListener(new View.OnTouchListener() {
             private int startX,startY;
             //对不同的事件做不同的逻辑处理
@@ -93,14 +90,7 @@ public class ToastLocationActivity extends Activity{
                                 bottom>mScreenHeight-22){//22:通知栏高度
                             return true;
                         }
-                        if (top>(mScreenHeight-22)/2){
-                            bt_bottom.setVisibility(View.INVISIBLE);
-                            bt_top.setVisibility(View.VISIBLE);
-                        }else {
-                            bt_bottom.setVisibility(View.VISIBLE);
-                            bt_top.setVisibility(View.INVISIBLE);
-                        }
-
+                        placeBt(top);
                         //告知移动的控件，按照计算出来的坐标展示
                         l_drag.layout(left,top,right,bottom);
                         //重置坐标
@@ -109,6 +99,24 @@ public class ToastLocationActivity extends Activity{
 
                         break;
                     case MotionEvent.ACTION_UP:
+                        //双击居中
+                        System.arraycopy(mHits,1,mHits,0,mHits.length-1);
+                        mHits[mHits.length-1]= SystemClock.uptimeMillis();
+                        if (mHits[mHits.length-1]-mHits[0]<500){
+                            Log.i("Life","双击事件");
+                            //当前控件所在屏幕的（左，上,右，下）角的位置
+                            left = (mSreenWidth-l_drag.getWidth())/2;
+                            top = (mScreenHeight-22-l_drag.getHeight())/2;
+                            right =left+l_drag.getWidth();
+                            bottom = top+l_drag.getHeight();
+                            //告知移动的控件，按照计算出来的坐标展示
+                            l_drag.layout(left,top,right,bottom);
+                            //重置坐标
+                            startX= (int) event.getRawX();
+                            startY= (int) event.getRawY();
+                            placeBt(top);
+                        }
+
                         //记录左上角的点，通过控件的宽高计算其他点的值。存储移动到的位置
                         SpUtils.putInt(getApplication(), ConstantValue.LOCATION_X,l_drag.getLeft());
                         SpUtils.putInt(getApplication(), ConstantValue.LOCATION_Y,l_drag.getTop());
@@ -118,5 +126,14 @@ public class ToastLocationActivity extends Activity{
                 return true;//false:不响应事件
             }
         });
+    }
+    public void placeBt(int locationY){
+        if (locationY>(mScreenHeight-22-l_drag.getHeight())/2){
+            bt_bottom.setVisibility(View.INVISIBLE);
+            bt_top.setVisibility(View.VISIBLE);
+        }else {
+            bt_bottom.setVisibility(View.VISIBLE);
+            bt_top.setVisibility(View.INVISIBLE);
+        }
     }
 }
