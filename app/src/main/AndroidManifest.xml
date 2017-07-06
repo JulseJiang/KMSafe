@@ -81,6 +81,8 @@
         <activity android:name="activity.ToastLocationActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
         <activity android:name="activity.AppManagerActivity"/>
+        <activity android:name="activity.ProgcessManagerActivity"/>
+
         <receiver android:name="receiver.BootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>

@@ -105,8 +105,9 @@ public class HomeActivity extends Activity{
                         startActivity(new Intent(getApplicationContext(),AppManagerActivity.class));
                         break;
                     case 3:
-                        Intent intent3 = new Intent(getApplicationContext(),TestActivity.class);
-                        startActivity(intent3);
+                        /*Intent intent3 = new Intent(getApplicationContext(),TestActivity.class);
+                        startActivity(intent3);*/
+                        startActivity(new Intent(getApplicationContext(),ProgcessManagerActivity.class));
                         break;
                     case 7:
                         startActivity(new Intent(getApplicationContext(),AToolActivity.class));

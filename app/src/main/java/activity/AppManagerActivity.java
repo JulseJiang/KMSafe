@@ -121,13 +121,12 @@ public class AppManagerActivity extends Activity implements View.OnClickListener
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                if (i==0||i==mCustomerList.size()){
+                if (i==0||i==mCustomerList.size()+1){
                     Log.i("Life","点击了纯文字条目");
                     return ;//表示不处理，不响应点击事件
                 }else {
                     if (i<mCustomerList.size()+1){
                         mAppInfo=mCustomerList.get(i-1);
-                        return ;
                     }else {
                         //返回系统应用对应的条目
                         mAppInfo=mSystemList.get(i-mCustomerList.size()-2);
@@ -308,6 +307,7 @@ public class AppManagerActivity extends Activity implements View.OnClickListener
 
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
+            //判断当前索引指向的条目类型状态码
             int type = getItemViewType(i);
             if (type==0){
                 //展示纯文字条目
@@ -339,9 +339,10 @@ public class AppManagerActivity extends Activity implements View.OnClickListener
                 }else {
                     holder= (ViewHolder) view.getTag();
                 }
-                holder.iv_icon.setBackground(mAppInfoList.get(i).icon);
-                holder.tv_name.setText(mAppInfoList.get(i).name);
-                if (mAppInfoList.get(i).isSdCard){
+                holder.iv_icon.setBackground(getItem(i).icon);
+                holder.tv_name.setText(getItem(i).name);
+                //显示应用安装的位置
+                if (getItem(i).isSdCard){
                     holder.tv_path.setText("sd卡应用");
                 }else {
                     holder.tv_path.setText("手机应用");

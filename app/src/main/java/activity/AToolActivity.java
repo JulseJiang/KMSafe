@@ -43,12 +43,12 @@ public class AToolActivity extends Activity{
      */
     private void showSmsBackUpDialog() {
         //创建一个带进度条的对话框
-/*        final ProgressDialog progressDialog = new ProgressDialog(this);
+        final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setIcon(R.drawable.icon);
         progressDialog.setTitle("短信备份");
         //制定进度条的样式为水平
         progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        progressDialog.show();*/
+        progressDialog.show();
         //直接调用备份短信方法即可
         new Thread(){
             @Override
@@ -59,11 +59,13 @@ public class AToolActivity extends Activity{
                     public void setMax(int max) {
                         //由开发者自己决定使用进度条还是对话框
                         pb_bar.setMax(max);
+                        progressDialog.setMax(max);
                     }
 
                     @Override
                     public void setProgress(int index) {
                         pb_bar.setProgress(index);
+                        progressDialog.setProgress(index);
                     }
                 });
                 super.run();
