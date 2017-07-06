@@ -9,6 +9,7 @@
         android:text="卸载"
         android:id="@+id/tv_uninstall"
         android:gravity="center"
+        android:textColor="#fff"
         android:drawableTop="@drawable/white_164"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
@@ -16,6 +17,7 @@
         android:text="启动"
         android:id="@+id/tv_start"
         android:gravity="center"
+        android:textColor="#fff"
         android:drawableTop="@drawable/white_52"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
@@ -23,6 +25,7 @@
         android:text="分享"
         android:id="@+id/tv_share"
         android:gravity="center"
+        android:textColor="#fff"
         android:drawableTop="@drawable/white_166"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
