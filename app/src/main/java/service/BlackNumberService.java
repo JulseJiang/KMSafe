@@ -7,7 +7,9 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.ContentObserver;
 import android.net.Uri;
+import android.os.Handler;
 import android.os.IBinder;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
@@ -30,6 +32,7 @@ public class BlackNumberService extends Service {
     private InnerSmsReceiver mInnerSmsReceiver;
     private TelephonyManager mTM;
     private MyPhoneStateListener myPhoneStateListener;
+    private MyContentObserver myContentObserver;
     @Override
     public IBinder onBind(Intent intent) {
         return null;
@@ -59,6 +62,18 @@ public class BlackNumberService extends Service {
     @Override
     public void onDestroy() {
         Log.i("Life","关闭BlackNumberService");
+        //注销广播
+        if (mInnerSmsReceiver!=null){
+            unregisterReceiver(mInnerSmsReceiver);
+        }
+        //注销内容观察者
+        if (myContentObserver!=null){
+            getContentResolver().unregisterContentObserver(myContentObserver);
+        }
+        //取消对电话状态的监听
+        if (myPhoneStateListener!=null){
+            mTM.listen(myPhoneStateListener,PhoneStateListener.LISTEN_NONE);
+        }
         super.onDestroy();
     }
 
@@ -141,13 +156,29 @@ public class BlackNumberService extends Service {
                 e.printStackTrace();
             }
             //6.在内容解析器上注册内容观察者，通过内容观察者，观察数据库（Uri决定表和库）的变化
-//            getContentResolver().registerContentObserver(Uri.parse("content://call_log/calls",
-//                    new My));
+            myContentObserver = new MyContentObserver(new Handler(), phone);
+            getContentResolver().registerContentObserver(Uri.parse("content://call_log/calls"),
+                    true,//模糊匹配
+            myContentObserver);
+        }
+    }
+    class MyContentObserver extends ContentObserver {
+        private String phone;
+        public MyContentObserver(Handler handler,String phone) {
+            super(handler);
+            this.phone=phone;
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
             //7..删除次被拦截的电话号码的通信记录（权限）
             getContentResolver().delete(Uri.parse("content://call_log/calls"),
                     "number=?",
                     new String[]{phone});
+            super.onChange(selfChange);
+
         }
+
     }
 
 }

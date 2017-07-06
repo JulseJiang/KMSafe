@@ -33,6 +33,10 @@
     <uses-permission android:name="android.permission.READ_CALL_LOG"/>
     <!--修改通话记录-->
     <uses-permission android:name="android.permission.WRITE_CALL_LOG"/>
+    <!--读取短信的权限-->
+    <uses-permission android:name="android.permission.READ_SMS"/>
+    <!--没有找到写短信的权限-->
+    <uses-permission android:name="android.permission.WRITE_SMS"/>
     <!--测试类 无效-->
     <!--<instrumentation
         android:name="android.test.InstrumentationTestRunner"
@@ -76,6 +80,7 @@
         <activity android:name="activity.AToolActivity"/>
         <activity android:name="activity.ToastLocationActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+        <activity android:name="activity.AppManagerActivity"/>
         <receiver android:name="receiver.BootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>

@@ -22,7 +22,7 @@ import util.ToastUtil;
 
 public class DeviceAdminActivity extends Activity{
     private final String TAG="Life_DeviceAdmin";
-    private  Button bt_start,bt_lock,bt_wipedata,bt_uninstall;
+    private  Button bt_start,bt_lock,bt_wipedata,bt_uninstall,bt_return;
     private ComponentName mDeviceAdminSample;
     private DevicePolicyManager mDPM;
     @Override
@@ -37,6 +37,7 @@ public class DeviceAdminActivity extends Activity{
         bt_lock=findViewById(R.id.bt_lock);
         bt_wipedata=findViewById(R.id.bt_wipedata);
         bt_uninstall=findViewById(R.id.bt_uninstall);
+        bt_return=findViewById(R.id.bt_return);
         //组件对象可以作为是否激活的判断标志，参数为：上下文环境，广播接收者对应的字节码文件
         mDeviceAdminSample = new ComponentName(this, DeviceAdmin.class);
         mDPM= (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
@@ -88,5 +89,15 @@ public class DeviceAdminActivity extends Activity{
                 startActivity(intent);
             }
         });
+        //典型回调
+        bt_return.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+        //1.抬起的时候，做onClick方法调用
+        //2.android在sdk调用onClick方法
+        //3.onClick方法中的操纵
     }
 }

@@ -8,6 +8,7 @@
        style="@style/TitleStyle"
         android:text="高级工具"/>
     <TextView
+        android:id="@+id/tv_phone_adress"
        style="@style/RowTextStyle"
         android:text="归属地查询"/>
     <!--<view style="@style/lineStyle"/>-->
@@ -17,6 +18,7 @@
         android:layout_height="1dp"
         android:layout_margin="5dp"/>
     <TextView
+        android:id="@+id/tv_sms_backup"
         style="@style/RowTextStyle"
         android:text="短信备份"/>
     <!--<view style="@style/lineStyle"/>-->
@@ -43,5 +45,10 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_margin="5dp"/>
+    <ProgressBar
+        android:id="@+id/pb_bar"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>
