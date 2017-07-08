@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Debug;
+import android.util.Log;
 
 import com.julse.jules.kmsafe.R;
 
@@ -22,7 +23,11 @@ import db.domain.ProcessInfo;
  */
 
 public class ProcessInfoProvider {
-    //获取进程总数
+    /**
+     * 获取进程总数
+     * @param ctx
+     * @return
+     */
     public static int getProcessCount(Context ctx){
         //1.获取activityManager
         ActivityManager am = (ActivityManager) ctx.getSystemService(Context.ACTIVITY_SERVICE);
@@ -66,6 +71,7 @@ public class ProcessInfoProvider {
         //内存大小已经写入文件中，读取proc/meinfo文件，读取第一行，获取数字字符，转换为bytes，返回
         FileReader fileReader = null;
         BufferedReader bufferedReader=null;
+        long result=0;
         try {
             fileReader = new FileReader("proc/meminfo");
             bufferedReader = new BufferedReader(fileReader);
@@ -75,16 +81,18 @@ public class ProcessInfoProvider {
             //循环遍历每一个字符，如果此字符的ASCII码在0到9的区域，说明此字符有效
             StringBuffer stringBuffer = new StringBuffer();
             for (char c:charArray) {
-                if (c>'0'&&c<'9'){
+                if (c>='0'&&c<='9'){
                     stringBuffer.append(c);
                 }
             }
-            return Long.parseLong(stringBuffer.toString());
+            Log.i("Life"," 进程总长度"+Long.parseLong(stringBuffer.toString()));
+            result=Long.parseLong(stringBuffer.toString());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }finally {
+            Log.i("Life","运行了Finally");
             if (fileReader!=null&&bufferedReader!=null){
                 try {
                     fileReader.close();
@@ -94,10 +102,16 @@ public class ProcessInfoProvider {
                 }
 
             }
-            return 0;
+            return result;
         }
 
     }
+
+    /**
+     * 获取正在进行的进程信息集合
+     * @param ctx
+     * @return
+     */
     public static  List<ProcessInfo> getProcessInfo(Context ctx){
         //获取进程相关信息
         ArrayList<ProcessInfo> processInfoList = new ArrayList<>();
@@ -127,11 +141,13 @@ public class ProcessInfoProvider {
                 if ((applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM)==ApplicationInfo.FLAG_SYSTEM){
                     processInfo.isSystem = true;
                 }else {
-                    processInfo.icon = ctx.getResources().getDrawable(R.drawable.ic_earth);
-                    processInfo.isSystem=true;
+                    processInfo.isSystem=false;
                 }
             } catch (PackageManager.NameNotFoundException e) {
-                //通过包名找不到对应的应用
+                //通过包名找不到对应的应用,需要处理
+                processInfo.name=info.processName;
+                processInfo.icon = ctx.getResources().getDrawable(R.drawable.ic_earth);
+                processInfo.isSystem=true;
                 e.printStackTrace();
             }
             processInfoList.add(processInfo);

@@ -72,25 +72,7 @@ public class AppManagerActivity extends Activity implements View.OnClickListener
     private void initList() {
         lv_app_list=findViewById(R.id.lv_app_list);
         tv_des=findViewById(R.id.tv_des);
-        new Thread(){
-            @Override
-            public void run() {
-                super.run();
-                mAppInfoList = AppInfoProvider.getAppInfoList(getApplication());
-                mCustomerList=new ArrayList<AppInfo>();
-                mSystemList=new ArrayList<AppInfo>();
-                for (AppInfo appInfo:mAppInfoList){
-                    if (appInfo.isSystem){
-                        //系统应用
-                        mSystemList.add(appInfo);
-                    }else {
-                        //用户应用
-                        mCustomerList.add(appInfo);
-                    }
-                }
-                mHandler.sendEmptyMessage(0);
-            }
-        }.start();
+        getData();
         lv_app_list.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView absListView, int i) {
@@ -107,7 +89,7 @@ public class AppManagerActivity extends Activity implements View.OnClickListener
             public void onScroll(AbsListView absListView, int firstVisibleItem,
                                  int visibleItemCount, int totalItemCount) {
                 if (mCustomerList!=null&&mSystemList!=null){
-                    if (firstVisibleItem>mCustomerList.size()+1){
+                    if (firstVisibleItem>mCustomerList.size()){
                         //滚动到了系统条目
                         tv_des.setText("系统应用（"+mSystemList.size()+")");
                     }else {
@@ -251,6 +233,34 @@ public class AppManagerActivity extends Activity implements View.OnClickListener
         if (mPopupWindow!=null){
             mPopupWindow.dismiss();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        getData();
+        super.onResume();
+    }
+
+    private void getData() {
+        new Thread(){
+            @Override
+            public void run() {
+                super.run();
+                mAppInfoList = AppInfoProvider.getAppInfoList(getApplication());
+                mCustomerList=new ArrayList<AppInfo>();
+                mSystemList=new ArrayList<AppInfo>();
+                for (AppInfo appInfo:mAppInfoList){
+                    if (appInfo.isSystem){
+                        //系统应用
+                        mSystemList.add(appInfo);
+                    }else {
+                        //用户应用
+                        mCustomerList.add(appInfo);
+                    }
+                }
+                mHandler.sendEmptyMessage(0);
+            }
+        }.start();
     }
 
     private class MyAdapter extends BaseAdapter{
