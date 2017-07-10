@@ -28,6 +28,7 @@
         android:layout_height="1dp"
         android:layout_margin="5dp"/>
     <TextView
+        android:id="@+id/tv_commonnumber_query"
         style="@style/RowTextStyle"
         android:text="常用号码查询"/>
     <!--<view style="@style/lineStyle"/>-->

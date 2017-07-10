@@ -1,11 +1,14 @@
 package activity;
 
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.nfc.Tag;
 import android.os.Environment;
@@ -110,6 +113,56 @@ public class SplashActivity extends AppCompatActivity {
         initData();
 //      初始化动画
         initAnimation();
+//        初始化归属地数据库
+        initDB();
+        initShortCut();
+        Log.i(TAG,"是否有快捷方式:"+hasShortCut(this));
+    }
+
+    private void initDB() {
+    }
+
+    /**
+     * 生成快捷方式
+     */
+    private void initShortCut() {
+        //1.给intent维护图标，名称
+        Intent intent = new Intent();
+        //维护图标
+        intent.putExtra(Intent.EXTRA_SHORTCUT_ICON,
+                BitmapFactory.decodeResource(getResources(),R.drawable.ic_earth));
+        //名称
+        intent.putExtra(Intent.EXTRA_SHORTCUT_NAME,"KMSafe");
+        //点击快捷方式后跳转到activity
+        //维护开启的意图对象
+        Intent shortCutIntent = new Intent("android.intent.action.HOME");
+        shortCutIntent.addCategory("android.intent.category.DEFAULT");
+
+        intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT,shortCutIntent);
+        //发送广播
+        sendBroadcast(intent);
+    }
+    public static boolean hasShortCut(Context context) {
+        String url = "";
+        System.out.println(getSystemVersion());
+        if(getSystemVersion() < 8){
+            url = "content://com.android.launcher.settings/favorites?notify=true";
+        }else{
+            url = "content://com.android.launcher2.settings/favorites?notify=true";
+        }
+        ContentResolver resolver = context.getContentResolver();
+        Cursor cursor = resolver.query(Uri.parse(url), null, "title=?",
+                new String[] {context.getString(R.string.app_name)}, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            cursor.close();
+            return true;
+        }
+
+        return false;
+    }
+    private static int getSystemVersion() {
+        return android.os.Build.VERSION.SDK_INT;
     }
 
     /**

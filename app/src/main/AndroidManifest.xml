@@ -37,6 +37,8 @@
     <uses-permission android:name="android.permission.READ_SMS"/>
     <!--没有找到写短信的权限-->
     <uses-permission android:name="android.permission.WRITE_SMS"/>
+    <!--杀死后台进程的权限-->
+    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES"/>
     <!--测试类 无效-->
     <!--<instrumentation
         android:name="android.test.InstrumentationTestRunner"
@@ -66,7 +68,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="activity.HomeActivity"/>
+        <activity android:name="activity.HomeActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.HOME" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity android:name="activity.SettingActivity"/>
         <activity android:name="activity.TestActivity"/>
         <activity android:name="activity.SetupOverActivity"/>
@@ -82,6 +89,8 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
         <activity android:name="activity.AppManagerActivity"/>
         <activity android:name="activity.ProgcessManagerActivity"/>
+        <activity android:name="activity.ProcessSettingActivity"/>
+        <activity android:name="activity.CommonNumberQueryActivity"/>
 
         <receiver android:name="receiver.BootReceiver">
             <intent-filter>
@@ -106,10 +115,19 @@
             <meta-data android:name="android.app.device_admin"
                 android:resource="@xml/device_admin_sample"/>
         </receiver>
+        <!--生成桌面快捷方式-->
+<!--        <receiver
+            android:name="com.android.launcher2.InstallShortcutReceiver"
+            android:permission="com.android.launcher.permission.INSTALL_SHORTCUT">
+        <intent-filter>
+            <action android:name="com.android.launcher.action.INSTALL_SHORTCUT"/>
+        </intent-filter>
+    </receiver>-->
         <service android:name="service.LocationService"/><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
      App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
         <service android:name="service.BlackNumberService"/>
         <service android:name="service.AddressService"/>
+        <service android:name="service.LockScreenService"/>
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />

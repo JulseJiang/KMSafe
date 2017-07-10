@@ -44,5 +44,9 @@ public class ConstantValue {
     /**
      * 是否开启防盗保护
      */
-    public static String OPEN_SECURITY ="open_security";
+    public static final  String OPEN_SECURITY ="open_security";
+    /**
+     * 存储是否显示系统进程
+     */
+    public static final String SHOW_SYSTEM="show_system";
 }

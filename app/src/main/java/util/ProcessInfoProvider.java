@@ -86,7 +86,7 @@ public class ProcessInfoProvider {
                 }
             }
             Log.i("Life"," 进程总长度"+Long.parseLong(stringBuffer.toString()));
-            result=Long.parseLong(stringBuffer.toString());
+            result=Long.parseLong(stringBuffer.toString())*1024;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -153,5 +153,28 @@ public class ProcessInfoProvider {
             processInfoList.add(processInfo);
         }
         return processInfoList;
+    }
+    public static void killProcess(Context ctx,ProcessInfo processInfo){
+        //1.获取activityManager
+        ActivityManager am = (ActivityManager) ctx.getSystemService(Context.ACTIVITY_SERVICE);
+        //根据包名，杀死后台进程（权限）
+        am.killBackgroundProcesses(processInfo.getPackageName());
+    }
+
+    /**
+     * (锁屏时)杀死所有的进程
+     * @param ctx
+     */
+    public static void killAll(Context ctx) {
+        ActivityManager am = (ActivityManager) ctx.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningAppProcessInfo> runningAppProcesses = am.getRunningAppProcesses();
+        for (ActivityManager.RunningAppProcessInfo info : runningAppProcesses){
+            if (info.processName.equals(ctx.getPackageName())){
+                //如果匹配上了手机卫士，则需要跳出本次循环，清理其他进程
+                continue;
+            }
+            am.killBackgroundProcesses(info.processName);
+    }
+        Log.i("Life","锁屏杀进程"+runningAppProcesses.size()+"个");
     }
 }

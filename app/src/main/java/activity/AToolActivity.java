@@ -2,6 +2,7 @@ package activity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
@@ -18,13 +19,25 @@ import util.SmsBackup;
  * Created by jules on 2017/7/2.
  */
 public class AToolActivity extends Activity{
-    private TextView tv_phone_adress,tv_sms_backup;
+    private TextView tv_phone_adress,tv_sms_backup,tv_commonnumber_query;
     private ProgressBar pb_bar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_atool);
+        //短信备份方法
         initSmsBackUp();
+        initCommonNumberQuery();
+    }
+
+    private void initCommonNumberQuery() {
+        tv_commonnumber_query=findViewById(R.id.tv_commonnumber_query);
+        tv_commonnumber_query.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(),CommonNumberQueryActivity.class));
+            }
+        });
     }
 
     private void initSmsBackUp() {
